@@ -8,6 +8,7 @@ interface ArmyModel {
   entry: BattleScribeEntry;
   quantity: number;
   id: string;
+  upgrades: BattleScribeEntry[];
 }
 
 interface SavedArmy {
@@ -94,7 +95,8 @@ export class ArmyBuilderComponent implements OnInit {
     const armyModel: ArmyModel = {
       entry: this.selectedEntry,
       quantity: 1,
-      id: `${this.selectedEntry.id}-${Date.now()}`
+      id: `${this.selectedEntry.id}-${Date.now()}`,
+      upgrades: []
     };
     
     this.armyModels.push(armyModel);
@@ -114,7 +116,11 @@ export class ArmyBuilderComponent implements OnInit {
 
   get totalPoints(): number {
     return this.armyModels.reduce((total, model) => {
-      return total + (model.entry.points * model.quantity);
+      const modelPoints = model.entry.points * model.quantity;
+      const upgradePoints = model.upgrades.reduce((upgradeTotal, upgrade) => {
+        return upgradeTotal + (upgrade.points * model.quantity);
+      }, 0);
+      return total + modelPoints + upgradePoints;
     }, 0);
   }
 
@@ -126,7 +132,11 @@ export class ArmyBuilderComponent implements OnInit {
 
   get totalRules(): number {
     return this.armyModels.reduce((total, model) => {
-      return total + model.entry.rules.length;
+      const modelRules = model.entry.rules.length;
+      const upgradeRules = model.upgrades.reduce((upgradeTotal, upgrade) => {
+        return upgradeTotal + upgrade.rules.length;
+      }, 0);
+      return total + modelRules + upgradeRules;
     }, 0);
   }
 
@@ -181,6 +191,27 @@ export class ArmyBuilderComponent implements OnInit {
       const updatedArmies = this.savedArmies.filter((a: SavedArmy) => a.id !== armyId);
       localStorage.setItem('savedArmies', JSON.stringify(updatedArmies));
       this.savedArmies = updatedArmies;
+    }
+  }
+
+  addUpgradeToModel(modelId: string, upgrade: BattleScribeEntry) {
+    const model = this.armyModels.find(m => m.id === modelId);
+    if (model) {
+      // Check if upgrade is already added to this model
+      const isAlreadyAdded = model.upgrades.some(existingUpgrade => existingUpgrade.id === upgrade.id);
+      if (!isAlreadyAdded) {
+        model.upgrades.push(upgrade);
+      }
+    }
+  }
+
+  removeUpgradeFromModel(modelId: string, upgrade: BattleScribeEntry) {
+    const model = this.armyModels.find(m => m.id === modelId);
+    if (model) {
+      const index = model.upgrades.findIndex(u => u.id === upgrade.id);
+      if (index !== -1) {
+        model.upgrades.splice(index, 1);
+      }
     }
   }
 }

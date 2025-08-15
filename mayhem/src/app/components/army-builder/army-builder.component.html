@@ -66,8 +66,11 @@
             *ngFor="let model of armyModels"
             [entry]="model.entry"
             [quantity]="model.quantity"
+            [upgrades]="model.upgrades"
             (quantityChange)="updateModelQuantity(model.id, $event)"
             (remove)="removeModelFromArmy(model.id)"
+            (addUpgrade)="addUpgradeToModel(model.id, $event)"
+            (removeUpgrade)="removeUpgradeFromModel(model.id, $event)"
           ></app-model>
         </div>
 

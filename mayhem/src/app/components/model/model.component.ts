@@ -12,10 +12,15 @@ import { BattleScribeEntry } from '../../services/battlescribe.service';
 export class ModelComponent {
   @Input() entry!: BattleScribeEntry;
   @Input() quantity: number = 1;
+  @Input() upgrades: BattleScribeEntry[] = [];
   @Output() quantityChange = new EventEmitter<number>();
   @Output() remove = new EventEmitter<void>();
+  @Output() addUpgrade = new EventEmitter<BattleScribeEntry>();
+  @Output() removeUpgrade = new EventEmitter<BattleScribeEntry>();
   
   rulesExpanded = true;
+  upgradesExpanded = false;
+  selectedUpgradesExpanded = false;
 
   updateQuantity(newQuantity: number) {
     if (newQuantity >= 1) {
@@ -29,6 +34,22 @@ export class ModelComponent {
   }
 
   get totalPoints(): number {
-    return this.entry.points * this.quantity;
+    const modelPoints = this.entry.points * this.quantity;
+    const upgradePoints = this.upgrades.reduce((total, upgrade) => {
+      return total + (upgrade.points * this.quantity);
+    }, 0);
+    return modelPoints + upgradePoints;
+  }
+
+  addUpgradeToModel(upgrade: BattleScribeEntry) {
+    this.addUpgrade.emit(upgrade);
+  }
+
+  removeUpgradeFromModel(upgrade: BattleScribeEntry) {
+    this.removeUpgrade.emit(upgrade);
+  }
+
+  isUpgradeAlreadyAdded(upgrade: BattleScribeEntry): boolean {
+    return this.upgrades.some(existingUpgrade => existingUpgrade.id === upgrade.id);
   }
 }

@@ -174,3 +174,151 @@
   color: #666;
   font-size: 12px;
 }
+
+.upgrades {
+  margin-top: 16px;
+}
+
+.upgrades h5 {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.upgrades-header {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.upgrades-header:hover {
+  color: #45a049;
+}
+
+.upgrades-content {
+  margin-top: 8px;
+}
+
+.upgrade {
+  background-color: #f1f8e9;
+  border-left: 3px solid #4caf50;
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.upgrade-info {
+  flex: 1;
+}
+
+.upgrade-info strong {
+  color: #2e7d32;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.upgrade-points {
+  font-size: 12px;
+  color: #666;
+  background-color: #e8f5e8;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+.add-upgrade-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.add-upgrade-btn:hover {
+  background-color: #45a049;
+}
+
+.add-upgrade-btn.disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.add-upgrade-btn.disabled:hover {
+  background-color: #ccc;
+}
+
+.selected-upgrades {
+  margin-top: 16px;
+}
+
+.selected-upgrades h5 {
+  color: #2196f3;
+  font-weight: bold;
+}
+
+.selected-upgrades-header {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.selected-upgrades-header:hover {
+  color: #1976d2;
+}
+
+.selected-upgrades-content {
+  margin-top: 8px;
+}
+
+.selected-upgrade {
+  background-color: #e3f2fd;
+  border-left: 3px solid #2196f3;
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selected-upgrade .upgrade-info strong {
+  color: #1565c0;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.selected-upgrade .upgrade-points {
+  font-size: 12px;
+  color: #666;
+  background-color: #bbdefb;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+.remove-upgrade-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.remove-upgrade-btn:hover {
+  background-color: #d32f2f;
+}

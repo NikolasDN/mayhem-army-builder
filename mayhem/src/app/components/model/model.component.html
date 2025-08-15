@@ -44,4 +44,45 @@
       </div>
     </div>
   </div>
+
+  <div *ngIf="upgrades.length > 0" class="selected-upgrades">
+    <h5 (click)="selectedUpgradesExpanded = !selectedUpgradesExpanded" class="selected-upgrades-header">
+      Selected Upgrades ({{ upgrades.length }}) 
+      <span class="expand-icon">{{ selectedUpgradesExpanded ? '▼' : '▶' }}</span>
+    </h5>
+    <div *ngIf="selectedUpgradesExpanded" class="selected-upgrades-content">
+      <div *ngFor="let upgrade of upgrades" class="selected-upgrade">
+        <div class="upgrade-info">
+          <strong>{{ upgrade.name }}</strong>
+          <span class="upgrade-points" *ngIf="upgrade.points > 0">+{{ upgrade.points }} pts</span>
+          <span class="upgrade-points" *ngIf="upgrade.points === 0">Free</span>
+        </div>
+        <button (click)="removeUpgradeFromModel(upgrade)" class="remove-upgrade-btn">Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="entry.linkedEntries.length > 0" class="upgrades">
+    <h5 (click)="upgradesExpanded = !upgradesExpanded" class="upgrades-header">
+      Available Upgrades ({{ entry.linkedEntries.length }}) 
+      <span class="expand-icon">{{ upgradesExpanded ? '▼' : '▶' }}</span>
+    </h5>
+    <div *ngIf="upgradesExpanded" class="upgrades-content">
+      <div *ngFor="let upgrade of entry.linkedEntries" class="upgrade">
+        <div class="upgrade-info">
+          <strong>{{ upgrade.name }}</strong>
+          <span class="upgrade-points" *ngIf="upgrade.points > 0">+{{ upgrade.points }} pts</span>
+          <span class="upgrade-points" *ngIf="upgrade.points === 0">Free</span>
+        </div>
+        <button 
+          (click)="addUpgradeToModel(upgrade)" 
+          [disabled]="isUpgradeAlreadyAdded(upgrade)"
+          class="add-upgrade-btn"
+          [class.disabled]="isUpgradeAlreadyAdded(upgrade)"
+        >
+          {{ isUpgradeAlreadyAdded(upgrade) ? 'Added' : 'Add' }}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

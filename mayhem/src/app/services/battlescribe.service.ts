@@ -40,6 +40,7 @@ export interface BattleScribeEntry {
   entries: BattleScribeEntry[];
   entryGroups: BattleScribeEntryGroup[];
   modifiers: BattleScribeModifier[];
+  linkedEntries: BattleScribeEntry[];
 }
 
 export interface BattleScribeProfile {
@@ -233,6 +234,12 @@ export class BattleScribeService {
   private parseCatalogue(catalogueElement: Element): BattleScribeCatalogue {
     const globalRules = this.parseRules(this.querySelectorAllNS(catalogueElement, 'rule'));
     
+    // First pass: parse all entries without linked entries
+    const initialEntries = this.parseEntriesInitial(this.querySelectorAllNS(catalogueElement, 'entry'), globalRules);
+    
+    // Second pass: parse entries with linked entries resolved
+    const finalEntries = this.parseEntries(this.querySelectorAllNS(catalogueElement, 'entry'), globalRules, initialEntries);
+    
     return {
       id: catalogueElement.getAttribute('id') || '',
       revision: parseInt(catalogueElement.getAttribute('revision') || '0'),
@@ -242,7 +249,7 @@ export class BattleScribeService {
       name: catalogueElement.getAttribute('name') || '',
       authorContact: catalogueElement.getAttribute('authorContact') || '',
       authorUrl: catalogueElement.getAttribute('authorUrl') || '',
-      entries: this.parseEntries(this.querySelectorAllNS(catalogueElement, 'entry'), globalRules),
+      entries: finalEntries,
       entryGroups: this.parseEntryGroups(this.querySelectorAllNS(catalogueElement, 'entryGroup'), globalRules),
       rules: globalRules,
       profiles: this.parseProfiles(this.querySelectorAllNS(catalogueElement, 'profile'))
@@ -281,11 +288,15 @@ export class BattleScribeService {
     }));
   }
 
-  private parseEntries(entries: NodeListOf<Element>, globalRules: BattleScribeRule[]): BattleScribeEntry[] {
-    return Array.from(entries).map(entry => this.parseEntry(entry, globalRules));
+  private parseEntriesInitial(entries: NodeListOf<Element>, globalRules: BattleScribeRule[]): BattleScribeEntry[] {
+    return Array.from(entries).map(entry => this.parseEntryInitial(entry, globalRules));
   }
 
-  private parseEntry(entryElement: Element, globalRules: BattleScribeRule[]): BattleScribeEntry {
+  private parseEntries(entries: NodeListOf<Element>, globalRules: BattleScribeRule[], allEntries: BattleScribeEntry[]): BattleScribeEntry[] {
+    return Array.from(entries).map(entry => this.parseEntry(entry, globalRules, allEntries));
+  }
+
+  private parseEntryInitial(entryElement: Element, globalRules: BattleScribeRule[]): BattleScribeEntry {
     const links = this.parseLinks(this.querySelectorAllNS(entryElement, 'link'));
     const ruleLinks = links.filter(link => link.linkType === 'rule');
     
@@ -301,16 +312,6 @@ export class BattleScribeService {
     // Combine direct rules and linked rules
     const directRules = this.parseRules(this.querySelectorAllNS(entryElement, 'rule'));
     const allRules = [...directRules, ...linkedRules];
-    
-    // Debug logging for Bolt Thrower
-    if (entryElement.getAttribute('name') === 'Bolt Thrower') {
-      console.log('Bolt Thrower parsing:', {
-        ruleLinks: ruleLinks,
-        linkedRules: linkedRules,
-        directRules: directRules,
-        allRules: allRules
-      });
-    }
     
     return {
       id: entryElement.getAttribute('id') || '',
@@ -331,9 +332,87 @@ export class BattleScribeService {
       profiles: this.parseProfiles(this.querySelectorAllNS(entryElement, 'profile')),
       rules: allRules,
       links: links,
-      entries: this.parseEntries(this.querySelectorAllNS(entryElement, 'entry'), globalRules),
+      entries: this.parseEntriesInitial(this.querySelectorAllNS(entryElement, 'entry'), globalRules),
       entryGroups: this.parseEntryGroups(this.querySelectorAllNS(entryElement, 'entryGroup'), globalRules),
-      modifiers: this.parseModifiers(this.querySelectorAllNS(entryElement, 'modifier'))
+      modifiers: this.parseModifiers(this.querySelectorAllNS(entryElement, 'modifier')),
+      linkedEntries: []
+    };
+  }
+
+  private parseEntry(entryElement: Element, globalRules: BattleScribeRule[], allEntries: BattleScribeEntry[]): BattleScribeEntry {
+    const links = this.parseLinks(this.querySelectorAllNS(entryElement, 'link'));
+    const ruleLinks = links.filter(link => link.linkType === 'rule');
+    const entryLinks = links.filter(link => link.linkType === 'entry');
+    
+    // Resolve linked rules
+    const linkedRules = ruleLinks.map(link => {
+      const rule = globalRules.find(r => r.id === link.targetId);
+      if (!rule) {
+        console.warn(`Rule not found for targetId: ${link.targetId}`);
+      }
+      return rule || { id: link.targetId, name: 'Unknown Rule', description: 'Rule not found', hidden: false, page: 0 };
+    });
+    
+    // Resolve linked entries
+    const linkedEntries = entryLinks.map(link => {
+      const entry = allEntries.find(e => e.id === link.targetId);
+      if (!entry) {
+        console.warn(`Entry not found for targetId: ${link.targetId}`);
+      }
+      return entry || { 
+        id: link.targetId, 
+        name: 'Unknown Entry', 
+        points: 0, 
+        type: 'unknown', 
+        categoryId: '', 
+        minSelections: 0, 
+        maxSelections: -1, 
+        minPoints: 0, 
+        maxPoints: -1, 
+        minInRoster: 0, 
+        maxInRoster: -1, 
+        collective: false, 
+        hidden: false, 
+        page: 0, 
+        profiles: [], 
+        rules: [], 
+        links: [], 
+        entries: [], 
+        entryGroups: [], 
+        modifiers: [],
+        linkedEntries: []
+      };
+    });
+    
+    // Combine direct rules and linked rules
+    const directRules = this.parseRules(this.querySelectorAllNS(entryElement, 'rule'));
+    const allRules = [...directRules, ...linkedRules];
+    
+
+    
+    return {
+      id: entryElement.getAttribute('id') || '',
+      name: entryElement.getAttribute('name') || '',
+      points: parseFloat(entryElement.getAttribute('points') || '0'),
+      type: entryElement.getAttribute('type') || '',
+      categoryId: entryElement.getAttribute('categoryId') || '',
+      minSelections: parseInt(entryElement.getAttribute('minSelections') || '0'),
+      maxSelections: parseInt(entryElement.getAttribute('maxSelections') || '-1'),
+      minPoints: parseFloat(entryElement.getAttribute('minPoints') || '0'),
+      maxPoints: parseFloat(entryElement.getAttribute('maxPoints') || '-1'),
+      minInRoster: parseInt(entryElement.getAttribute('minInRoster') || '0'),
+      maxInRoster: parseInt(entryElement.getAttribute('maxInRoster') || '-1'),
+      collective: entryElement.getAttribute('collective') === 'true',
+      hidden: entryElement.getAttribute('hidden') === 'true',
+      page: parseInt(entryElement.getAttribute('page') || '0'),
+      book: entryElement.getAttribute('book') || undefined,
+      profiles: this.parseProfiles(this.querySelectorAllNS(entryElement, 'profile')),
+      rules: allRules,
+      links: links,
+      entries: this.parseEntries(this.querySelectorAllNS(entryElement, 'entry'), globalRules, allEntries),
+      entryGroups: this.parseEntryGroups(this.querySelectorAllNS(entryElement, 'entryGroup'), globalRules, allEntries),
+      modifiers: this.parseModifiers(this.querySelectorAllNS(entryElement, 'modifier')),
+      linkedEntries: linkedEntries
     };
   }
 
@@ -369,15 +448,15 @@ export class BattleScribeService {
     }));
   }
 
-  private parseEntryGroups(entryGroups: NodeListOf<Element>, globalRules: BattleScribeRule[]): BattleScribeEntryGroup[] {
+  private parseEntryGroups(entryGroups: NodeListOf<Element>, globalRules: BattleScribeRule[], allEntries?: BattleScribeEntry[]): BattleScribeEntryGroup[] {
     return Array.from(entryGroups).map(group => ({
       id: group.getAttribute('id') || '',
       name: group.getAttribute('name') || '',
       hidden: group.getAttribute('hidden') === 'true',
       page: parseInt(group.getAttribute('page') || '0'),
       book: group.getAttribute('book') || undefined,
-      entries: this.parseEntries(this.querySelectorAllNS(group, 'entry'), globalRules),
-      entryGroups: this.parseEntryGroups(this.querySelectorAllNS(group, 'entryGroup'), globalRules),
+      entries: allEntries ? this.parseEntries(this.querySelectorAllNS(group, 'entry'), globalRules, allEntries) : this.parseEntriesInitial(this.querySelectorAllNS(group, 'entry'), globalRules),
+      entryGroups: this.parseEntryGroups(this.querySelectorAllNS(group, 'entryGroup'), globalRules, allEntries),
       rules: this.parseRules(this.querySelectorAllNS(group, 'rule')),
       profiles: this.parseProfiles(this.querySelectorAllNS(group, 'profile')),
       modifiers: this.parseModifiers(this.querySelectorAllNS(group, 'modifier'))
