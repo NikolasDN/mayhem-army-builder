@@ -339,3 +339,71 @@
     justify-content: space-between;
   }
 }
+
+.print-button {
+  background-color: #4a5568;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.print-button:hover {
+  background-color: #2d3748;
+}
+
+// Print styles
+@media print {
+  // Hide non-essential elements
+  .left-panel,
+  .army-controls,
+  .saved-armies-section,
+  .print-button {
+    display: none !important;
+  }
+  
+  // Adjust layout for print
+  .main-content {
+    display: block !important;
+    grid-template-columns: none !important;
+  }
+  
+  .right-panel {
+    width: 100% !important;
+    max-width: none !important;
+  }
+  
+  // Make army list more print-friendly
+  .army-models {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  // Ensure good contrast for print
+  .army-builder-container {
+    background: white !important;
+    color: black !important;
+  }
+  
+  // Remove shadows and borders for cleaner print
+  .model-card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    margin-bottom: 16px !important;
+    page-break-inside: avoid;
+  }
+  
+  // Ensure headers are visible
+  h2, h3, h4 {
+    color: black !important;
+  }
+  
+  // Make sure text is readable
+  body {
+    font-size: 12pt !important;
+    line-height: 1.4 !important;
+  }
+}

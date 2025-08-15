@@ -504,3 +504,62 @@
 .add-option-btn.disabled:hover {
   background-color: #ccc;
 }
+
+// Print styles for model component
+@media print {
+  // Hide interactive elements
+  .quantity-controls button,
+  .remove-model-btn,
+  .add-upgrade-btn,
+  .remove-upgrade-btn,
+  .add-option-btn {
+    display: none !important;
+  }
+  
+  // Show quantity as text instead of controls
+  .quantity-controls {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  
+  .quantity-controls::before {
+    content: "Quantity: " !important;
+    font-weight: bold !important;
+  }
+  
+  .quantity-controls::after {
+    content: attr(data-quantity) !important;
+  }
+  
+  // Hide available upgrades and entry groups sections completely
+  .upgrades,
+  .entry-groups {
+    display: none !important;
+  }
+  
+  // Ensure selected upgrades section is expanded for print
+  .selected-upgrades-content {
+    display: block !important;
+  }
+  
+  // Remove collapsible functionality for print
+  .selected-upgrades-header {
+    cursor: default !important;
+  }
+  
+  // Ensure good contrast
+  .model-card {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+  
+  // Make sure selected upgrades are visible
+  .selected-upgrade {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #ddd !important;
+  }
+}

@@ -5,12 +5,11 @@
   </div>
   
   <div class="model-details">
-    <p><strong>Type:</strong> {{ entry.type }}</p>
     <p><strong>Points per model:</strong> {{ entry.points }}</p>
     <p><strong>Total points:</strong> {{ totalPoints }}</p>
   </div>
   
-  <div class="quantity-controls">
+  <div class="quantity-controls" [attr.data-quantity]="quantity">
     <label>Quantity:</label>
     <div class="quantity-buttons">
       <button (click)="updateQuantity(quantity - 1)" [disabled]="quantity <= 1">-</button>

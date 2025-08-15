@@ -57,6 +57,7 @@
         <div class="army-controls">
           <button (click)="saveArmy()" class="save-button">Save Army</button>
           <button (click)="clearArmy()" class="clear-button">Clear Army</button>
+          <button (click)="printArmy()" class="print-button" *ngIf="armyModels.length > 0">Print Army</button>
         </div>
 
         <h3>Your Army</h3>

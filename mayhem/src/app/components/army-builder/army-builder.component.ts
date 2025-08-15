@@ -195,6 +195,10 @@ export class ArmyBuilderComponent implements OnInit {
     }
   }
 
+  printArmy() {
+    window.print();
+  }
+
   addUpgradeToModel(modelId: string, upgrade: BattleScribeEntry) {
     const model = this.armyModels.find(m => m.id === modelId);
     if (model) {
