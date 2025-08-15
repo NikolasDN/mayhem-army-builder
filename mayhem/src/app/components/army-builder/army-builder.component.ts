@@ -70,14 +70,24 @@ export class ArmyBuilderComponent implements OnInit {
   }
 
   filterModelsOnly(entries: BattleScribeEntry[]): BattleScribeEntry[] {
-    // Filter out upgrades and show only models
-    // Typically upgrades have types like 'upgrade', 'wargear', 'equipment', etc.
-    // Models usually have types like 'unit', 'model', 'character', etc.
+    // Show entries that can be added to the army
+    // This includes models and special entries like "Elite" variants
     return entries.filter(entry => {
       const type = entry.type.toLowerCase();
-      // Include model-like entries, exclude upgrade-like entries
-      return !type.includes('upgrade') && 
-             !type.includes('wargear') && 
+      const name = entry.name.toLowerCase();
+      
+      // Include model-like entries
+      if (type === 'model' || type === 'unit' || type === 'character') {
+        return true;
+      }
+      
+      // Include "Elite" variants even if they have type="upgrade"
+      if (name.includes('elite') && type === 'upgrade') {
+        return true;
+      }
+      
+      // Exclude other upgrade-like entries
+      return !type.includes('wargear') && 
              !type.includes('equipment') &&
              !type.includes('weapon') &&
              !type.includes('armour') &&
@@ -213,5 +223,38 @@ export class ArmyBuilderComponent implements OnInit {
         model.upgrades.splice(index, 1);
       }
     }
+  }
+
+  // Check if an entry is available based on conditions
+  isEntryAvailable(entry: BattleScribeEntry): boolean {
+    return this.battleScribeService.checkEntryConditions(entry, this.armyModels);
+  }
+
+  // Get condition description for an entry
+  getConditionDescription(entry: BattleScribeEntry): string | null {
+    if (!entry.modifiers || entry.modifiers.length === 0) {
+      return null;
+    }
+
+    for (const modifier of entry.modifiers) {
+      if (modifier.conditions && modifier.conditions.length > 0) {
+        for (const condition of modifier.conditions) {
+          if (condition.type === 'at least' && condition.field === 'selections') {
+            const requiredCount = parseFloat(condition.value);
+            const actualCount = this.armyModels
+              .filter(model => model.entry.id === condition.childId)
+              .reduce((total, model) => total + model.quantity, 0);
+            const requiredEntry = this.catalogue?.entries.find(e => e.id === condition.childId);
+            const entryName = requiredEntry ? requiredEntry.name : 'Unknown Entry';
+            
+            if (actualCount < requiredCount) {
+              return `Requires at least ${requiredCount} ${entryName} models (you have ${actualCount})`;
+            }
+          }
+        }
+      }
+    }
+
+    return null;
   }
 }

@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BattleScribeEntry } from '../../services/battlescribe.service';
+import { BattleScribeEntry, BattleScribeService } from '../../services/battlescribe.service';
 
 @Component({
   selector: 'app-model',
@@ -13,10 +13,13 @@ export class ModelComponent {
   @Input() entry!: BattleScribeEntry;
   @Input() quantity: number = 1;
   @Input() upgrades: BattleScribeEntry[] = [];
+  @Input() armyModels: any[] = []; // Add army state input
   @Output() quantityChange = new EventEmitter<number>();
   @Output() remove = new EventEmitter<void>();
   @Output() addUpgrade = new EventEmitter<BattleScribeEntry>();
   @Output() removeUpgrade = new EventEmitter<BattleScribeEntry>();
+
+  constructor(private battleScribeService: BattleScribeService) {}
   
   rulesExpanded = true;
   upgradesExpanded = false;
@@ -52,6 +55,40 @@ export class ModelComponent {
 
   isUpgradeAlreadyAdded(upgrade: BattleScribeEntry): boolean {
     return this.upgrades.some(existingUpgrade => existingUpgrade.id === upgrade.id);
+  }
+
+  // Check if an upgrade is available based on conditions
+  isUpgradeAvailable(upgrade: BattleScribeEntry): boolean {
+    return this.battleScribeService.checkEntryConditions(upgrade, this.armyModels);
+  }
+
+  // Get condition description for an upgrade
+  getUpgradeConditionDescription(upgrade: BattleScribeEntry): string | null {
+    if (!upgrade.modifiers || upgrade.modifiers.length === 0) {
+      return null;
+    }
+
+    for (const modifier of upgrade.modifiers) {
+      if (modifier.conditions && modifier.conditions.length > 0) {
+        for (const condition of modifier.conditions) {
+          if (condition.type === 'at least' && condition.field === 'selections') {
+            const requiredCount = parseFloat(condition.value);
+            const actualCount = this.armyModels
+              .filter(model => model.entry.id === condition.childId)
+              .reduce((total, model) => total + model.quantity, 0);
+            
+            if (actualCount < requiredCount) {
+              // Try to find the required entry name
+              const requiredEntry = this.armyModels.find(model => model.entry.id === condition.childId)?.entry;
+              const entryName = requiredEntry ? requiredEntry.name : 'Unknown Entry';
+              return `Requires at least ${requiredCount} ${entryName} models (you have ${actualCount})`;
+            }
+          }
+        }
+      }
+    }
+
+    return null;
   }
 
   getEntryGroupEntries(entryGroup: any): BattleScribeEntry[] {

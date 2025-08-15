@@ -28,12 +28,16 @@
           *ngFor="let entry of filteredEntries" 
           class="entry-item"
           [class.selected]="selectedEntry?.id === entry.id"
+          [class.unavailable]="!isEntryAvailable(entry)"
           (click)="onEntrySelect(entry)"
         >
           <div class="entry-info">
             <h4>{{ entry.name }}</h4>
             <p><strong>Type:</strong> {{ entry.type }}</p>
             <p><strong>Points:</strong> {{ entry.points }}</p>
+            <div *ngIf="!isEntryAvailable(entry)" class="condition-info">
+              <p class="condition-text">{{ getConditionDescription(entry) }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -67,6 +71,7 @@
             [entry]="model.entry"
             [quantity]="model.quantity"
             [upgrades]="model.upgrades"
+            [armyModels]="armyModels"
             (quantityChange)="updateModelQuantity(model.id, $event)"
             (remove)="removeModelFromArmy(model.id)"
             (addUpgrade)="addUpgradeToModel(model.id, $event)"

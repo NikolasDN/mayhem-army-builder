@@ -68,17 +68,20 @@
       <span class="expand-icon">{{ upgradesExpanded ? '▼' : '▶' }}</span>
     </h5>
     <div *ngIf="upgradesExpanded" class="upgrades-content">
-      <div *ngFor="let upgrade of entry.linkedEntries" class="upgrade">
+      <div *ngFor="let upgrade of entry.linkedEntries" class="upgrade" [class.unavailable]="!isUpgradeAvailable(upgrade)">
         <div class="upgrade-info">
           <strong>{{ upgrade.name }}</strong>
           <span class="upgrade-points" *ngIf="upgrade.points > 0">+{{ upgrade.points }} pts</span>
           <span class="upgrade-points" *ngIf="upgrade.points === 0">Free</span>
+          <div *ngIf="!isUpgradeAvailable(upgrade)" class="condition-info">
+            <p class="condition-text">{{ getUpgradeConditionDescription(upgrade) }}</p>
+          </div>
         </div>
         <button 
           (click)="addUpgradeToModel(upgrade)" 
-          [disabled]="isUpgradeAlreadyAdded(upgrade)"
+          [disabled]="isUpgradeAlreadyAdded(upgrade) || !isUpgradeAvailable(upgrade)"
           class="add-upgrade-btn"
-          [class.disabled]="isUpgradeAlreadyAdded(upgrade)"
+          [class.disabled]="isUpgradeAlreadyAdded(upgrade) || !isUpgradeAvailable(upgrade)"
         >
           {{ isUpgradeAlreadyAdded(upgrade) ? 'Added' : 'Add' }}
         </button>
@@ -104,17 +107,20 @@
               <span class="section-count">({{ section.items.length }} options)</span>
             </div>
             <div class="section-options">
-              <div *ngFor="let option of section.items" class="entry-group-option">
+              <div *ngFor="let option of section.items" class="entry-group-option" [class.unavailable]="!isUpgradeAvailable(option)">
                 <div class="option-info">
                   <strong>{{ option.name }}</strong>
                   <span class="option-points" *ngIf="option.points > 0">+{{ option.points }} pts</span>
                   <span class="option-points" *ngIf="option.points === 0">Free</span>
+                  <div *ngIf="!isUpgradeAvailable(option)" class="condition-info">
+                    <p class="condition-text">{{ getUpgradeConditionDescription(option) }}</p>
+                  </div>
                 </div>
                 <button 
                   (click)="addUpgradeToModel(option)" 
-                  [disabled]="isUpgradeAlreadyAdded(option)"
+                  [disabled]="isUpgradeAlreadyAdded(option) || !isUpgradeAvailable(option)"
                   class="add-option-btn"
-                  [class.disabled]="isUpgradeAlreadyAdded(option)"
+                  [class.disabled]="isUpgradeAlreadyAdded(option) || !isUpgradeAvailable(option)"
                 >
                   {{ isUpgradeAlreadyAdded(option) ? 'Added' : 'Add' }}
                 </button>

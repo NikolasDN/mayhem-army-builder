@@ -96,6 +96,12 @@ export interface BattleScribeModifier {
   field: string;
   value: string;
   conditions: BattleScribeCondition[];
+  repeat?: boolean;
+  numRepeats?: number;
+  incrementParentId?: string;
+  incrementChildId?: string;
+  incrementField?: string;
+  incrementValue?: string;
 }
 
 export interface BattleScribeCondition {
@@ -108,6 +114,8 @@ export interface BattleScribeCondition {
   shared: boolean;
   includeChildSelections: boolean;
   includeChildForgeWorlds: boolean;
+  parentId?: string;
+  childId?: string;
 }
 
 @Injectable({
@@ -496,39 +504,41 @@ export class BattleScribeService {
         const entry = allEntries?.find(e => e.id === link.targetId);
         if (!entry) {
           console.warn(`Entry not found for targetId: ${link.targetId}`);
-          // Try to find the entry in the XML to get its name
-          let entryName = 'Unknown Entry';
-          if (catalogueElement) {
-            const entryElements = this.querySelectorAllNS(catalogueElement, 'entry');
-            const entryElement = Array.from(entryElements).find((el: Element) => el.getAttribute('id') === link.targetId);
-            if (entryElement) {
-              entryName = entryElement.getAttribute('name') || 'Unknown Entry';
-            }
-          }
-          return { 
-            id: link.targetId, 
-            name: entryName, 
-            points: 0, 
-            type: 'unknown', 
-            categoryId: '', 
-            minSelections: 0, 
-            maxSelections: -1, 
-            minPoints: 0, 
-            maxPoints: -1, 
-            minInRoster: 0, 
-            maxInRoster: -1, 
-            collective: false, 
-            hidden: false, 
-            page: 0, 
-            profiles: [], 
-            rules: [], 
-            links: [], 
-            entries: [], 
-            entryGroups: [], 
-            modifiers: [],
-            linkedEntries: [],
-            linkedEntryGroups: []
-          };
+                     // Try to find the entry in the XML to get its name and points
+           let entryName = 'Unknown Entry';
+           let entryPoints = 0;
+           if (catalogueElement) {
+             const entryElements = this.querySelectorAllNS(catalogueElement, 'entry');
+             const entryElement = Array.from(entryElements).find((el: Element) => el.getAttribute('id') === link.targetId);
+             if (entryElement) {
+               entryName = entryElement.getAttribute('name') || 'Unknown Entry';
+               entryPoints = parseFloat(entryElement.getAttribute('points') || '0');
+             }
+           }
+           return { 
+             id: link.targetId, 
+             name: entryName, 
+             points: entryPoints, 
+             type: 'unknown', 
+             categoryId: '', 
+             minSelections: 0, 
+             maxSelections: -1, 
+             minPoints: 0, 
+             maxPoints: -1, 
+             minInRoster: 0, 
+             maxInRoster: -1, 
+             collective: false, 
+             hidden: false, 
+             page: 0, 
+             profiles: [], 
+             rules: [], 
+             links: [], 
+             entries: [], 
+             entryGroups: [], 
+             modifiers: [],
+             linkedEntries: [],
+             linkedEntryGroups: []
+           };
         }
         return entry;
       });
@@ -567,7 +577,13 @@ export class BattleScribeService {
       type: modifier.getAttribute('type') || '',
       field: modifier.getAttribute('field') || '',
       value: modifier.getAttribute('value') || '',
-      conditions: this.parseConditions(this.querySelectorAllNS(modifier, 'condition'))
+      conditions: this.parseConditions(this.querySelectorAllNS(modifier, 'condition')),
+      repeat: modifier.getAttribute('repeat') === 'true',
+      numRepeats: parseInt(modifier.getAttribute('numRepeats') || '1'),
+      incrementParentId: modifier.getAttribute('incrementParentId') || undefined,
+      incrementChildId: modifier.getAttribute('incrementChildId') || undefined,
+      incrementField: modifier.getAttribute('incrementField') || undefined,
+      incrementValue: modifier.getAttribute('incrementValue') || undefined
     }));
   }
 
@@ -581,7 +597,9 @@ export class BattleScribeService {
       percentValue: condition.getAttribute('percentValue') === 'true',
       shared: condition.getAttribute('shared') === 'true',
       includeChildSelections: condition.getAttribute('includeChildSelections') === 'true',
-      includeChildForgeWorlds: condition.getAttribute('includeChildForgeWorlds') === 'true'
+      includeChildForgeWorlds: condition.getAttribute('includeChildForgeWorlds') === 'true',
+      parentId: condition.getAttribute('parentId') || undefined,
+      childId: condition.getAttribute('childId') || undefined
     }));
   }
 
@@ -642,5 +660,40 @@ export class BattleScribeService {
 
   getRuleById(catalogue: BattleScribeCatalogue, id: string): BattleScribeRule | undefined {
     return catalogue.rules.find(rule => rule.id === id);
+  }
+
+  // Check if conditions are met for an entry based on the current army
+  checkEntryConditions(entry: BattleScribeEntry, armyModels: any[]): boolean {
+    // If no modifiers, conditions are met
+    if (!entry.modifiers || entry.modifiers.length === 0) {
+      return true;
+    }
+
+    // Check each modifier's conditions
+    for (const modifier of entry.modifiers) {
+      if (modifier.conditions && modifier.conditions.length > 0) {
+        for (const condition of modifier.conditions) {
+          if (!this.checkCondition(condition, armyModels)) {
+            return false;
+          }
+        }
+      }
+    }
+
+    return true;
+  }
+
+  private checkCondition(condition: BattleScribeCondition, armyModels: any[]): boolean {
+    // Handle "at least" conditions for roster selections
+    if (condition.type === 'at least' && condition.field === 'selections') {
+      const requiredCount = parseFloat(condition.value);
+      const actualCount = armyModels
+        .filter(model => model.entry.id === condition.childId)
+        .reduce((total, model) => total + model.quantity, 0);
+      return actualCount >= requiredCount;
+    }
+
+    // Add more condition types as needed
+    return true;
   }
 }
