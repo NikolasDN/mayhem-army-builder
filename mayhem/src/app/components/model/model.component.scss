@@ -322,3 +322,148 @@
 .remove-upgrade-btn:hover {
   background-color: #d32f2f;
 }
+
+.entry-groups {
+  margin-top: 16px;
+}
+
+.entry-groups h5 {
+  color: #9c27b0;
+  font-weight: bold;
+}
+
+.entry-groups-header {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.entry-groups-header:hover {
+  color: #7b1fa2;
+}
+
+.entry-groups-content {
+  margin-top: 8px;
+}
+
+.entry-group {
+  background-color: #f3e5f5;
+  border-left: 3px solid #9c27b0;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.entry-group-info {
+  margin-bottom: 8px;
+}
+
+.entry-group-info strong {
+  color: #6a1b9a;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.entry-group-count {
+  font-size: 12px;
+  color: #666;
+  background-color: #e1bee7;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+.entry-group-hierarchy {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hierarchy-section {
+  background-color: #faf5ff;
+  border: 1px solid #e1bee7;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.section-header {
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #e1bee7;
+}
+
+.section-header strong {
+  color: #6a1b9a;
+  font-size: 13px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.section-count {
+  font-size: 11px;
+  color: #666;
+  background-color: #e1bee7;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 6px;
+}
+
+.section-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.entry-group-option {
+  background-color: #faf5ff;
+  border: 1px solid #e1bee7;
+  border-radius: 4px;
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.option-info strong {
+  color: #6a1b9a;
+  font-size: 13px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.option-points {
+  font-size: 11px;
+  color: #666;
+  background-color: #e1bee7;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 6px;
+}
+
+.add-option-btn {
+  background-color: #9c27b0;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.add-option-btn:hover {
+  background-color: #7b1fa2;
+}
+
+.add-option-btn.disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.add-option-btn.disabled:hover {
+  background-color: #ccc;
+}

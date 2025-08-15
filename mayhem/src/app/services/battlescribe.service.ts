@@ -41,6 +41,7 @@ export interface BattleScribeEntry {
   entryGroups: BattleScribeEntryGroup[];
   modifiers: BattleScribeModifier[];
   linkedEntries: BattleScribeEntry[];
+  linkedEntryGroups: BattleScribeEntryGroup[];
 }
 
 export interface BattleScribeProfile {
@@ -234,11 +235,24 @@ export class BattleScribeService {
   private parseCatalogue(catalogueElement: Element): BattleScribeCatalogue {
     const globalRules = this.parseRules(this.querySelectorAllNS(catalogueElement, 'rule'));
     
+    // Parse all entry groups first
+    const allEntryGroups = this.parseEntryGroups(this.querySelectorAllNS(catalogueElement, 'entryGroup'), globalRules, undefined, undefined, catalogueElement);
+    
     // First pass: parse all entries without linked entries
     const initialEntries = this.parseEntriesInitial(this.querySelectorAllNS(catalogueElement, 'entry'), globalRules);
     
-    // Second pass: parse entries with linked entries resolved
-    const finalEntries = this.parseEntries(this.querySelectorAllNS(catalogueElement, 'entry'), globalRules, initialEntries);
+    // Second pass: parse entries with linked entries and entry groups resolved
+    const finalEntries = this.parseEntries(this.querySelectorAllNS(catalogueElement, 'entry'), globalRules, initialEntries, allEntryGroups);
+    
+    // Create a map of all entries by ID for quick lookup
+    const allEntriesMap = new Map<string, BattleScribeEntry>();
+    finalEntries.forEach(entry => allEntriesMap.set(entry.id, entry));
+    
+    // Update entry groups with resolved entries
+    const resolvedEntryGroups = allEntryGroups.map(group => ({
+      ...group,
+      entries: group.entries.map(entry => allEntriesMap.get(entry.id) || entry)
+    }));
     
     return {
       id: catalogueElement.getAttribute('id') || '',
@@ -250,7 +264,7 @@ export class BattleScribeService {
       authorContact: catalogueElement.getAttribute('authorContact') || '',
       authorUrl: catalogueElement.getAttribute('authorUrl') || '',
       entries: finalEntries,
-      entryGroups: this.parseEntryGroups(this.querySelectorAllNS(catalogueElement, 'entryGroup'), globalRules),
+      entryGroups: resolvedEntryGroups,
       rules: globalRules,
       profiles: this.parseProfiles(this.querySelectorAllNS(catalogueElement, 'profile'))
     };
@@ -292,8 +306,8 @@ export class BattleScribeService {
     return Array.from(entries).map(entry => this.parseEntryInitial(entry, globalRules));
   }
 
-  private parseEntries(entries: NodeListOf<Element>, globalRules: BattleScribeRule[], allEntries: BattleScribeEntry[]): BattleScribeEntry[] {
-    return Array.from(entries).map(entry => this.parseEntry(entry, globalRules, allEntries));
+  private parseEntries(entries: NodeListOf<Element>, globalRules: BattleScribeRule[], allEntries: BattleScribeEntry[], allEntryGroups: BattleScribeEntryGroup[]): BattleScribeEntry[] {
+    return Array.from(entries).map(entry => this.parseEntry(entry, globalRules, allEntries, allEntryGroups));
   }
 
   private parseEntryInitial(entryElement: Element, globalRules: BattleScribeRule[]): BattleScribeEntry {
@@ -332,17 +346,19 @@ export class BattleScribeService {
       profiles: this.parseProfiles(this.querySelectorAllNS(entryElement, 'profile')),
       rules: allRules,
       links: links,
-      entries: this.parseEntriesInitial(this.querySelectorAllNS(entryElement, 'entry'), globalRules),
-      entryGroups: this.parseEntryGroups(this.querySelectorAllNS(entryElement, 'entryGroup'), globalRules),
-      modifiers: this.parseModifiers(this.querySelectorAllNS(entryElement, 'modifier')),
-      linkedEntries: []
+              entries: this.parseEntriesInitial(this.querySelectorAllNS(entryElement, 'entry'), globalRules),
+        entryGroups: this.parseEntryGroups(this.querySelectorAllNS(entryElement, 'entryGroup'), globalRules, undefined, undefined, undefined),
+        modifiers: this.parseModifiers(this.querySelectorAllNS(entryElement, 'modifier')),
+        linkedEntries: [],
+        linkedEntryGroups: []
     };
   }
 
-  private parseEntry(entryElement: Element, globalRules: BattleScribeRule[], allEntries: BattleScribeEntry[]): BattleScribeEntry {
+  private parseEntry(entryElement: Element, globalRules: BattleScribeRule[], allEntries: BattleScribeEntry[], allEntryGroups: BattleScribeEntryGroup[]): BattleScribeEntry {
     const links = this.parseLinks(this.querySelectorAllNS(entryElement, 'link'));
     const ruleLinks = links.filter(link => link.linkType === 'rule');
     const entryLinks = links.filter(link => link.linkType === 'entry');
+    const entryGroupLinks = links.filter(link => link.linkType === 'entry group');
     
     // Resolve linked rules
     const linkedRules = ruleLinks.map(link => {
@@ -353,7 +369,7 @@ export class BattleScribeService {
       return rule || { id: link.targetId, name: 'Unknown Rule', description: 'Rule not found', hidden: false, page: 0 };
     });
     
-    // Resolve linked entries
+        // Resolve linked entries
     const linkedEntries = entryLinks.map(link => {
       const entry = allEntries.find(e => e.id === link.targetId);
       if (!entry) {
@@ -380,7 +396,27 @@ export class BattleScribeService {
         entries: [], 
         entryGroups: [], 
         modifiers: [],
-        linkedEntries: []
+        linkedEntries: [],
+        linkedEntryGroups: []
+      };
+    });
+
+    // Resolve linked entry groups
+    const linkedEntryGroups = entryGroupLinks.map(link => {
+      const entryGroup = allEntryGroups.find(eg => eg.id === link.targetId);
+      if (!entryGroup) {
+        console.warn(`Entry group not found for targetId: ${link.targetId}`);
+      }
+      return entryGroup || { 
+        id: link.targetId, 
+        name: 'Unknown Entry Group', 
+        hidden: false, 
+        page: 0, 
+        entries: [], 
+        entryGroups: [], 
+        rules: [], 
+        profiles: [], 
+        modifiers: []
       };
     });
     
@@ -409,10 +445,11 @@ export class BattleScribeService {
       profiles: this.parseProfiles(this.querySelectorAllNS(entryElement, 'profile')),
       rules: allRules,
       links: links,
-      entries: this.parseEntries(this.querySelectorAllNS(entryElement, 'entry'), globalRules, allEntries),
-      entryGroups: this.parseEntryGroups(this.querySelectorAllNS(entryElement, 'entryGroup'), globalRules, allEntries),
-      modifiers: this.parseModifiers(this.querySelectorAllNS(entryElement, 'modifier')),
-      linkedEntries: linkedEntries
+              entries: this.parseEntries(this.querySelectorAllNS(entryElement, 'entry'), globalRules, allEntries, allEntryGroups),
+        entryGroups: this.parseEntryGroups(this.querySelectorAllNS(entryElement, 'entryGroup'), globalRules, allEntries, allEntryGroups, undefined),
+        modifiers: this.parseModifiers(this.querySelectorAllNS(entryElement, 'modifier')),
+        linkedEntries: linkedEntries,
+        linkedEntryGroups: linkedEntryGroups
     };
   }
 
@@ -448,19 +485,71 @@ export class BattleScribeService {
     }));
   }
 
-  private parseEntryGroups(entryGroups: NodeListOf<Element>, globalRules: BattleScribeRule[], allEntries?: BattleScribeEntry[]): BattleScribeEntryGroup[] {
-    return Array.from(entryGroups).map(group => ({
-      id: group.getAttribute('id') || '',
-      name: group.getAttribute('name') || '',
-      hidden: group.getAttribute('hidden') === 'true',
-      page: parseInt(group.getAttribute('page') || '0'),
-      book: group.getAttribute('book') || undefined,
-      entries: allEntries ? this.parseEntries(this.querySelectorAllNS(group, 'entry'), globalRules, allEntries) : this.parseEntriesInitial(this.querySelectorAllNS(group, 'entry'), globalRules),
-      entryGroups: this.parseEntryGroups(this.querySelectorAllNS(group, 'entryGroup'), globalRules, allEntries),
-      rules: this.parseRules(this.querySelectorAllNS(group, 'rule')),
-      profiles: this.parseProfiles(this.querySelectorAllNS(group, 'profile')),
-      modifiers: this.parseModifiers(this.querySelectorAllNS(group, 'modifier'))
-    }));
+  private parseEntryGroups(entryGroups: NodeListOf<Element>, globalRules: BattleScribeRule[], allEntries?: BattleScribeEntry[], allEntryGroups?: BattleScribeEntryGroup[], catalogueElement?: Element): BattleScribeEntryGroup[] {
+    return Array.from(entryGroups).map(group => {
+      // Parse links to resolve linked entries
+      const links = this.parseLinks(this.querySelectorAllNS(group, 'link'));
+      const entryLinks = links.filter(link => link.linkType === 'entry');
+      
+      // Resolve linked entries
+      const linkedEntries = entryLinks.map(link => {
+        const entry = allEntries?.find(e => e.id === link.targetId);
+        if (!entry) {
+          console.warn(`Entry not found for targetId: ${link.targetId}`);
+          // Try to find the entry in the XML to get its name
+          let entryName = 'Unknown Entry';
+          if (catalogueElement) {
+            const entryElements = this.querySelectorAllNS(catalogueElement, 'entry');
+            const entryElement = Array.from(entryElements).find((el: Element) => el.getAttribute('id') === link.targetId);
+            if (entryElement) {
+              entryName = entryElement.getAttribute('name') || 'Unknown Entry';
+            }
+          }
+          return { 
+            id: link.targetId, 
+            name: entryName, 
+            points: 0, 
+            type: 'unknown', 
+            categoryId: '', 
+            minSelections: 0, 
+            maxSelections: -1, 
+            minPoints: 0, 
+            maxPoints: -1, 
+            minInRoster: 0, 
+            maxInRoster: -1, 
+            collective: false, 
+            hidden: false, 
+            page: 0, 
+            profiles: [], 
+            rules: [], 
+            links: [], 
+            entries: [], 
+            entryGroups: [], 
+            modifiers: [],
+            linkedEntries: [],
+            linkedEntryGroups: []
+          };
+        }
+        return entry;
+      });
+
+      // Combine direct entries and linked entries
+      const directEntries = allEntries ? this.parseEntries(this.querySelectorAllNS(group, 'entry'), globalRules, allEntries, allEntryGroups || []) : this.parseEntriesInitial(this.querySelectorAllNS(group, 'entry'), globalRules);
+      const allGroupEntries = [...directEntries, ...linkedEntries];
+
+      return {
+        id: group.getAttribute('id') || '',
+        name: group.getAttribute('name') || '',
+        hidden: group.getAttribute('hidden') === 'true',
+        page: parseInt(group.getAttribute('page') || '0'),
+        book: group.getAttribute('book') || undefined,
+        entries: allGroupEntries,
+        entryGroups: this.parseEntryGroups(this.querySelectorAllNS(group, 'entryGroup'), globalRules, allEntries, allEntryGroups, catalogueElement),
+        rules: this.parseRules(this.querySelectorAllNS(group, 'rule')),
+        profiles: this.parseProfiles(this.querySelectorAllNS(group, 'profile')),
+        modifiers: this.parseModifiers(this.querySelectorAllNS(group, 'modifier'))
+      };
+    });
   }
 
   private parseLinks(links: NodeListOf<Element>): BattleScribeLink[] {

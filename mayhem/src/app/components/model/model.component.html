@@ -85,4 +85,44 @@
       </div>
     </div>
   </div>
+
+  <div *ngIf="entry.linkedEntryGroups.length > 0" class="entry-groups">
+    <h5 (click)="entryGroupsExpanded = !entryGroupsExpanded" class="entry-groups-header">
+      Available Entry Groups ({{ entry.linkedEntryGroups.length }}) 
+      <span class="expand-icon">{{ entryGroupsExpanded ? '▼' : '▶' }}</span>
+    </h5>
+    <div *ngIf="entryGroupsExpanded" class="entry-groups-content">
+      <div *ngFor="let entryGroup of entry.linkedEntryGroups" class="entry-group">
+        <div class="entry-group-info">
+          <strong>{{ entryGroup.name }}</strong>
+          <span class="entry-group-count">({{ getEntryGroupEntries(entryGroup).length }} options)</span>
+        </div>
+        <div class="entry-group-hierarchy">
+          <div *ngFor="let section of getEntryGroupHierarchy(entryGroup)" class="hierarchy-section">
+            <div class="section-header">
+              <strong>{{ section.name }}</strong>
+              <span class="section-count">({{ section.items.length }} options)</span>
+            </div>
+            <div class="section-options">
+              <div *ngFor="let option of section.items" class="entry-group-option">
+                <div class="option-info">
+                  <strong>{{ option.name }}</strong>
+                  <span class="option-points" *ngIf="option.points > 0">+{{ option.points }} pts</span>
+                  <span class="option-points" *ngIf="option.points === 0">Free</span>
+                </div>
+                <button 
+                  (click)="addUpgradeToModel(option)" 
+                  [disabled]="isUpgradeAlreadyAdded(option)"
+                  class="add-option-btn"
+                  [class.disabled]="isUpgradeAlreadyAdded(option)"
+                >
+                  {{ isUpgradeAlreadyAdded(option) ? 'Added' : 'Add' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

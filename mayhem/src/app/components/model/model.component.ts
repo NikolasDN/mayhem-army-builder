@@ -21,6 +21,7 @@ export class ModelComponent {
   rulesExpanded = true;
   upgradesExpanded = false;
   selectedUpgradesExpanded = false;
+  entryGroupsExpanded = false;
 
   updateQuantity(newQuantity: number) {
     if (newQuantity >= 1) {
@@ -51,5 +52,52 @@ export class ModelComponent {
 
   isUpgradeAlreadyAdded(upgrade: BattleScribeEntry): boolean {
     return this.upgrades.some(existingUpgrade => existingUpgrade.id === upgrade.id);
+  }
+
+  getEntryGroupEntries(entryGroup: any): BattleScribeEntry[] {
+    // Flatten all entries from the entry group and its nested entry groups
+    const allEntries: BattleScribeEntry[] = [];
+    
+    // Add direct entries
+    if (entryGroup.entries) {
+      allEntries.push(...entryGroup.entries);
+    }
+    
+    // Add entries from nested entry groups
+    if (entryGroup.entryGroups) {
+      entryGroup.entryGroups.forEach((nestedGroup: any) => {
+        allEntries.push(...this.getEntryGroupEntries(nestedGroup));
+      });
+    }
+    
+    return allEntries;
+  }
+
+  getEntryGroupHierarchy(entryGroup: any): any[] {
+    // Return the hierarchical structure of entry groups
+    const hierarchy: any[] = [];
+    
+    // Add direct entries if any
+    if (entryGroup.entries && entryGroup.entries.length > 0) {
+      hierarchy.push({
+        type: 'entries',
+        name: 'Direct Options',
+        items: entryGroup.entries
+      });
+    }
+    
+    // Add nested entry groups
+    if (entryGroup.entryGroups && entryGroup.entryGroups.length > 0) {
+      entryGroup.entryGroups.forEach((nestedGroup: any) => {
+        hierarchy.push({
+          type: 'group',
+          name: nestedGroup.name,
+          group: nestedGroup,
+          items: this.getEntryGroupEntries(nestedGroup)
+        });
+      });
+    }
+    
+    return hierarchy;
   }
 }
