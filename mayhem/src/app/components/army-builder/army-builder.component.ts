@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BattleScribeService, BattleScribeCatalogue, BattleScribeEntry } from '../../services/battlescribe.service';
@@ -43,6 +43,8 @@ export class ArmyBuilderComponent implements OnInit {
   
   // Saved armies
   savedArmies: SavedArmy[] = [];
+
+  @ViewChildren(ModelComponent) modelComponents!: QueryList<ModelComponent>;
 
   constructor(private battleScribeService: BattleScribeService) {}
 
@@ -196,7 +198,15 @@ export class ArmyBuilderComponent implements OnInit {
   }
 
   printArmy() {
-    window.print();
+    // Expand all sections in all model components for printing
+    this.modelComponents.forEach(modelComponent => {
+      modelComponent.expandForPrint();
+    });
+    
+    // Small delay to ensure DOM updates are complete
+    setTimeout(() => {
+      window.print();
+    }, 100);
   }
 
   addUpgradeToModel(modelId: string, upgrade: BattleScribeEntry) {

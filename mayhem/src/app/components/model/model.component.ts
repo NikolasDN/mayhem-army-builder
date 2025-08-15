@@ -26,6 +26,12 @@ export class ModelComponent {
   selectedUpgradesExpanded = false;
   entryGroupsExpanded = false;
 
+  // Method to expand sections for printing
+  expandForPrint() {
+    this.selectedUpgradesExpanded = true;
+    this.rulesExpanded = true;
+  }
+
   updateQuantity(newQuantity: number) {
     if (newQuantity >= 1) {
       this.quantity = newQuantity;

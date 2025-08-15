@@ -539,6 +539,10 @@
   }
   
   // Ensure selected upgrades section is expanded for print
+  .selected-upgrades {
+    display: block !important;
+  }
+  
   .selected-upgrades-content {
     display: block !important;
   }
