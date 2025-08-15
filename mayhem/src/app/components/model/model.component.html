@@ -1,0 +1,47 @@
+<div class="model-card">
+  <div class="model-header">
+    <h4>{{ entry.name }}</h4>
+    <button class="remove-btn" (click)="removeModel()" title="Remove model">×</button>
+  </div>
+  
+  <div class="model-details">
+    <p><strong>Type:</strong> {{ entry.type }}</p>
+    <p><strong>Points per model:</strong> {{ entry.points }}</p>
+    <p><strong>Total points:</strong> {{ totalPoints }}</p>
+  </div>
+  
+  <div class="quantity-controls">
+    <label>Quantity:</label>
+    <div class="quantity-buttons">
+      <button (click)="updateQuantity(quantity - 1)" [disabled]="quantity <= 1">-</button>
+      <span class="quantity-display">{{ quantity }}</span>
+      <button (click)="updateQuantity(quantity + 1)">+</button>
+    </div>
+  </div>
+  
+  <div *ngIf="entry.profiles.length > 0" class="profiles">
+    <h5>Profiles:</h5>
+    <div *ngFor="let profile of entry.profiles" class="profile">
+      <strong>{{ profile.name }}</strong>
+      <div *ngFor="let char of profile.characteristics" class="characteristic">
+        {{ char.name }}: {{ char.value }}
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="entry.rules.length > 0" class="rules">
+    <h5 (click)="rulesExpanded = !rulesExpanded" class="rules-header">
+      Rules ({{ entry.rules.length }}) 
+      <span class="expand-icon">{{ rulesExpanded ? '▼' : '▶' }}</span>
+    </h5>
+    <div *ngIf="rulesExpanded" class="rules-content">
+      <div *ngFor="let rule of entry.rules" class="rule">
+        <strong>{{ rule.name }}</strong>
+        <p *ngIf="rule.description">{{ rule.description }}</p>
+        <div *ngIf="!rule.description" class="no-description">
+          <em>No description available</em>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

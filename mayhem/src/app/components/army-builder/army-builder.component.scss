@@ -1,0 +1,314 @@
+.army-builder-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.header h2 {
+  margin: 0;
+  color: #1976d2;
+  font-size: 28px;
+}
+
+.army-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.army-name-input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  min-width: 200px;
+}
+
+.stats {
+  display: flex;
+  gap: 20px;
+}
+
+.stat {
+  font-size: 16px;
+  color: #666;
+}
+
+.stat strong {
+  color: #1976d2;
+  font-size: 18px;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+}
+
+.error {
+  color: #d32f2f;
+  background-color: #ffebee;
+  border: 1px solid #f44336;
+  border-radius: 4px;
+}
+
+.main-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  min-height: 600px;
+}
+
+.left-panel, .right-panel {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.left-panel h3, .right-panel h3 {
+  margin-top: 0;
+  color: #1976d2;
+  border-bottom: 2px solid #e3f2fd;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.entries-list {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+.entry-item {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.entry-item:hover {
+  background-color: #f5f5f5;
+}
+
+.entry-item.selected {
+  background-color: #e3f2fd;
+  border-left: 4px solid #1976d2;
+}
+
+.entry-item:last-child {
+  border-bottom: none;
+}
+
+.entry-info h4 {
+  margin: 0 0 8px 0;
+  color: #1976d2;
+  font-size: 16px;
+}
+
+.entry-info p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.add-button-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.add-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.add-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.add-button:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.army-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.save-button, .clear-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.save-button {
+  background-color: #1976d2;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #1565c0;
+}
+
+.clear-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.clear-button:hover {
+  background-color: #d32f2f;
+}
+
+.saved-armies-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.saved-armies-section h3 {
+  color: #1976d2;
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.empty-saved-armies {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.saved-armies-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.saved-army-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.saved-army-info h4 {
+  margin: 0 0 8px 0;
+  color: #1976d2;
+  font-size: 16px;
+}
+
+.saved-army-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.saved-army-stats span {
+  font-size: 12px;
+  color: #666;
+  background-color: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.saved-army-date {
+  font-size: 11px;
+  color: #999;
+}
+
+.saved-army-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.load-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.load-button:hover {
+  background-color: #45a049;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f;
+}
+
+.empty-army {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-style: italic;
+}
+
+.army-models {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .army-info {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .stats {
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,176 @@
+.model-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.model-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.model-header h4 {
+  margin: 0;
+  color: #1976d2;
+  font-size: 18px;
+}
+
+.remove-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-btn:hover {
+  background-color: #d32f2f;
+}
+
+.model-details {
+  margin-bottom: 16px;
+}
+
+.model-details p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.quantity-controls label {
+  font-weight: bold;
+  color: #666;
+}
+
+.quantity-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quantity-buttons button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.quantity-buttons button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.quantity-buttons button:hover:not(:disabled) {
+  background-color: #1565c0;
+}
+
+.quantity-display {
+  min-width: 40px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  color: #1976d2;
+}
+
+.profiles, .rules {
+  margin-top: 16px;
+}
+
+.profiles h5, .rules h5 {
+  color: #666;
+  margin-bottom: 8px;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 4px;
+}
+
+.profile, .rule {
+  background-color: #f9f9f9;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.rules h5 {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.rules-header {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.rules-header:hover {
+  color: #b71c1c;
+}
+
+.expand-icon {
+  font-size: 12px;
+  color: #666;
+}
+
+.rules-content {
+  margin-top: 8px;
+}
+
+.rule {
+  background-color: #fff3e0;
+  border-left: 3px solid #ff9800;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.rule strong {
+  color: #e65100;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.rule p {
+  margin: 4px 0 0 0;
+  color: #333;
+  line-height: 1.4;
+}
+
+.no-description {
+  color: #999;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.characteristic {
+  margin-left: 16px;
+  color: #666;
+  font-size: 12px;
+}

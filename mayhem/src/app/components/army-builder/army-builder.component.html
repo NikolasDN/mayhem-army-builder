@@ -1,0 +1,103 @@
+<div class="army-builder-container">
+  <div class="header">
+    <h2>Army Builder</h2>
+    <div class="army-info">
+      <input type="text" [(ngModel)]="armyName" placeholder="Army Name" class="army-name-input">
+             <div class="stats">
+         <span class="stat">Total Points: <strong>{{ totalPoints }}</strong></span>
+         <span class="stat">Total Models: <strong>{{ totalModels }}</strong></span>
+         <span class="stat">Total Rules: <strong>{{ totalRules }}</strong></span>
+       </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Loading BattleScribe data...
+  </div>
+
+  <div *ngIf="error" class="error">
+    Error: {{ error }}
+  </div>
+
+  <div *ngIf="catalogue && !loading" class="main-content">
+    <div class="left-panel">
+      <h3>Add Models</h3>
+
+      <div class="entries-list">
+        <div 
+          *ngFor="let entry of filteredEntries" 
+          class="entry-item"
+          [class.selected]="selectedEntry?.id === entry.id"
+          (click)="onEntrySelect(entry)"
+        >
+          <div class="entry-info">
+            <h4>{{ entry.name }}</h4>
+            <p><strong>Type:</strong> {{ entry.type }}</p>
+            <p><strong>Points:</strong> {{ entry.points }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="add-button-container">
+        <button 
+          (click)="addModelToArmy()" 
+          [disabled]="!selectedEntry"
+          class="add-button"
+        >
+          Add to Army
+        </button>
+      </div>
+    </div>
+
+          <div class="right-panel">
+        <div class="army-controls">
+          <button (click)="saveArmy()" class="save-button">Save Army</button>
+          <button (click)="clearArmy()" class="clear-button">Clear Army</button>
+        </div>
+
+        <h3>Your Army</h3>
+        
+        <div *ngIf="armyModels.length === 0" class="empty-army">
+          <p>No models in your army yet. Select a model from the left panel and click "Add to Army".</p>
+        </div>
+
+        <div *ngIf="armyModels.length > 0" class="army-models">
+          <app-model
+            *ngFor="let model of armyModels"
+            [entry]="model.entry"
+            [quantity]="model.quantity"
+            (quantityChange)="updateModelQuantity(model.id, $event)"
+            (remove)="removeModelFromArmy(model.id)"
+          ></app-model>
+        </div>
+
+        <div class="saved-armies-section">
+          <h3>Saved Armies</h3>
+          
+          <div *ngIf="savedArmies.length === 0" class="empty-saved-armies">
+            <p>No saved armies yet. Build an army and click "Save Army" to save it.</p>
+          </div>
+
+          <div *ngIf="savedArmies.length > 0" class="saved-armies-list">
+            <div *ngFor="let army of savedArmies" class="saved-army-item">
+              <div class="saved-army-info">
+                <h4>{{ army.name }}</h4>
+                <div class="saved-army-stats">
+                  <span>{{ army.totalPoints }} pts</span>
+                  <span>{{ army.totalModels }} models</span>
+                  <span>{{ army.totalRules }} rules</span>
+                </div>
+                <div class="saved-army-date">
+                  {{ army.dateCreated | date:'short' }}
+                </div>
+              </div>
+              <div class="saved-army-actions">
+                <button (click)="loadArmy(army.id)" class="load-button">Load</button>
+                <button (click)="deleteArmy(army.id)" class="delete-button">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
