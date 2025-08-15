@@ -114,13 +114,25 @@ export class ModelComponent {
     // Return the hierarchical structure of entry groups
     const hierarchy: any[] = [];
     
-    // Add direct entries if any
-    if (entryGroup.entries && entryGroup.entries.length > 0) {
-      hierarchy.push({
-        type: 'entries',
-        name: 'Direct Options',
-        items: entryGroup.entries
+    // Get all entries from nested groups to check for duplicates
+    const nestedEntries = new Set<string>();
+    if (entryGroup.entryGroups && entryGroup.entryGroups.length > 0) {
+      entryGroup.entryGroups.forEach((nestedGroup: any) => {
+        const groupEntries = this.getEntryGroupEntries(nestedGroup);
+        groupEntries.forEach((entry: BattleScribeEntry) => nestedEntries.add(entry.id));
       });
+    }
+    
+    // Add direct entries only if they're not already in nested groups
+    if (entryGroup.entries && entryGroup.entries.length > 0) {
+      const uniqueDirectEntries = entryGroup.entries.filter((entry: BattleScribeEntry) => !nestedEntries.has(entry.id));
+      if (uniqueDirectEntries.length > 0) {
+        hierarchy.push({
+          type: 'entries',
+          name: 'Direct Options',
+          items: uniqueDirectEntries
+        });
+      }
     }
     
     // Add nested entry groups
