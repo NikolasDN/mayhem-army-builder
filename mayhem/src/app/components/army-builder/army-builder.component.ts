@@ -70,28 +70,19 @@ export class ArmyBuilderComponent implements OnInit {
   }
 
   filterModelsOnly(entries: BattleScribeEntry[]): BattleScribeEntry[] {
-    // Show entries that can be added to the army
-    // This includes models and special entries like "Elite" variants
+    // Show only entries that are actual models/units that can be added to the army
+    // Exclude all upgrades, wargear, equipment, etc.
     return entries.filter(entry => {
       const type = entry.type.toLowerCase();
-      const name = entry.name.toLowerCase();
       
-      // Include model-like entries
-      if (type === 'model' || type === 'unit' || type === 'character') {
-        return true;
-      }
-      
-      // Include "Elite" variants even if they have type="upgrade"
-      if (name.includes('elite') && type === 'upgrade') {
-        return true;
-      }
-      
-      // Exclude other upgrade-like entries
-      return !type.includes('wargear') && 
-             !type.includes('equipment') &&
-             !type.includes('weapon') &&
-             !type.includes('armour') &&
-             !type.includes('item');
+      // Only include actual model/unit types
+      return type === 'model' || 
+             type === 'unit' || 
+             type === 'character' ||
+             type === 'infantry' ||
+             type === 'cavalry' ||
+             type === 'monster' ||
+             type === 'vehicle';
     });
   }
 
