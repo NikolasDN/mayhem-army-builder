@@ -1,0 +1,60 @@
+<div class="examples-container">
+  <h2>BattleScribe Service Examples</h2>
+  
+  <div class="example-section">
+    <h3>1. Basic Data Loading</h3>
+    <button (click)="loadBasicData()" [disabled]="loading">Load Catalogue Data</button>
+    <div *ngIf="basicData">
+      <p><strong>Loaded:</strong> {{ basicData.name }}</p>
+      <p><strong>Entries:</strong> {{ basicData.entries.length }}</p>
+    </div>
+  </div>
+  
+  <div class="example-section">
+    <h3>2. Filter Entries by Type</h3>
+    <div *ngIf="basicData">
+      <label>Select type:
+        <select (change)="filterByType($event)">
+          <option value="">All types</option>
+          <option *ngFor="let type of availableTypes" [value]="type">{{ type }}</option>
+        </select>
+      </label>
+      <div *ngIf="filteredByType.length > 0">
+        <p><strong>Found {{ filteredByType.length }} entries:</strong></p>
+        <ul>
+          <li *ngFor="let entry of filteredByType.slice(0, 5)">
+            {{ entry.name }} ({{ entry.points }} pts)
+          </li>
+          <li *ngIf="filteredByType.length > 5">... and {{ filteredByType.length - 5 }} more</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="example-section">
+    <h3>3. Find Specific Entry</h3>
+    <div *ngIf="basicData">
+      <input type="text" [(ngModel)]="searchId" placeholder="Enter entry ID">
+      <button (click)="findEntry()">Find Entry</button>
+      <div *ngIf="foundEntry">
+        <p><strong>Found:</strong> {{ foundEntry.name }}</p>
+        <p><strong>Type:</strong> {{ foundEntry.type }}</p>
+        <p><strong>Points:</strong> {{ foundEntry.points }}</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="example-section">
+    <h3>4. Load All Data Types</h3>
+    <button (click)="loadAllData()" [disabled]="loadingAll">Load All Data</button>
+    <div *ngIf="allData">
+      <p><strong>Catalogue:</strong> {{ allData.catalogue?.name }}</p>
+      <p><strong>Game System:</strong> {{ allData.gameSystem?.name }}</p>
+      <p><strong>Data Index:</strong> {{ allData.dataIndex?.name }}</p>
+    </div>
+  </div>
+  
+  <div class="loading" *ngIf="loading || loadingAll">
+    Loading data...
+  </div>
+</div>

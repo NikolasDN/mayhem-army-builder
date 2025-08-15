@@ -1,0 +1,71 @@
+<div class="container">
+  <h2>BattleScribe Data Viewer</h2>
+  
+  <div *ngIf="loading" class="loading">
+    Loading BattleScribe data...
+  </div>
+  
+  <div *ngIf="error" class="error">
+    Error: {{ error }}
+  </div>
+  
+  <div *ngIf="catalogue && !loading" class="catalogue-info">
+    <h3>{{ catalogue.name }}</h3>
+    <p><strong>Version:</strong> {{ catalogue.battleScribeVersion }}</p>
+    <p><strong>Revision:</strong> {{ catalogue.revision }}</p>
+    <p><strong>Author:</strong> {{ catalogue.authorContact }}</p>
+    <p><strong>Total Entries:</strong> {{ catalogue.entries.length }}</p>
+    <p><strong>Total Rules:</strong> {{ catalogue.rules.length }}</p>
+    <p><strong>Total Profiles:</strong> {{ catalogue.profiles.length }}</p>
+  </div>
+  
+  <div *ngIf="catalogue && !loading" class="entries-section">
+    <h3>Entries ({{ catalogue.entries.length }})</h3>
+    
+    <div class="filters">
+      <label>
+        Filter by type:
+        <select [(ngModel)]="selectedType" (change)="filterEntries()">
+          <option value="">All types</option>
+          <option *ngFor="let type of availableTypes" [value]="type">{{ type }}</option>
+        </select>
+      </label>
+      
+      <label>
+        Search:
+        <input type="text" [(ngModel)]="searchTerm" (input)="filterEntries()" placeholder="Search entries...">
+      </label>
+    </div>
+    
+    <div class="entries-grid">
+      <div *ngFor="let entry of filteredEntries" class="entry-card">
+        <h4>{{ entry.name }}</h4>
+        <div class="entry-details">
+          <p><strong>Type:</strong> {{ entry.type }}</p>
+          <p><strong>Points:</strong> {{ entry.points }}</p>
+          <p><strong>ID:</strong> {{ entry.id }}</p>
+          <p *ngIf="entry.book"><strong>Book:</strong> {{ entry.book }}</p>
+          <p *ngIf="entry.page > 0"><strong>Page:</strong> {{ entry.page }}</p>
+        </div>
+        
+        <div *ngIf="entry.profiles.length > 0" class="profiles">
+          <h5>Profiles ({{ entry.profiles.length }})</h5>
+          <div *ngFor="let profile of entry.profiles" class="profile">
+            <strong>{{ profile.name }}</strong>
+            <div *ngFor="let char of profile.characteristics" class="characteristic">
+              {{ char.name }}: {{ char.value }}
+            </div>
+          </div>
+        </div>
+        
+        <div *ngIf="entry.rules.length > 0" class="rules">
+          <h5>Rules ({{ entry.rules.length }})</h5>
+          <div *ngFor="let rule of entry.rules" class="rule">
+            <strong>{{ rule.name }}</strong>
+            <p *ngIf="rule.description">{{ rule.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
