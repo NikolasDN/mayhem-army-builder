@@ -173,8 +173,16 @@ export class ArmyBuilderComponent implements OnInit {
     // Get existing armies from localStorage
     const existingArmies = this.getSavedArmies();
     
-    // Add new army
-    existingArmies.push(armyData);
+    // Check if an army with the same name already exists
+    const existingArmyIndex = existingArmies.findIndex(army => army.name === this.armyName);
+    
+    if (existingArmyIndex !== -1) {
+      // Overwrite existing army with the same name
+      existingArmies[existingArmyIndex] = armyData;
+    } else {
+      // Add new army if no army with this name exists
+      existingArmies.push(armyData);
+    }
     
     // Save back to localStorage
     localStorage.setItem('savedArmies', JSON.stringify(existingArmies));
