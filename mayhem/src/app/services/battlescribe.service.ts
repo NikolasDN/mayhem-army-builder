@@ -252,9 +252,15 @@ export class BattleScribeService {
     // Second pass: parse entries with linked entries and entry groups resolved
     const finalEntries = this.parseEntries(this.querySelectorAllNS(catalogueElement, 'entry'), globalRules, initialEntries, allEntryGroups);
     
+    // Third pass: resolve linked entries with their full profiles
+    const entriesWithProfiles = finalEntries.map(entry => ({
+      ...entry,
+      linkedEntries: this.resolveLinkedEntriesWithProfiles(entry.linkedEntries, catalogueElement)
+    }));
+    
     // Create a map of all entries by ID for quick lookup
     const allEntriesMap = new Map<string, BattleScribeEntry>();
-    finalEntries.forEach(entry => allEntriesMap.set(entry.id, entry));
+    entriesWithProfiles.forEach(entry => allEntriesMap.set(entry.id, entry));
     
     // Update entry groups with resolved entries
     const resolvedEntryGroups = allEntryGroups.map(group => ({
@@ -382,31 +388,40 @@ export class BattleScribeService {
       const entry = allEntries.find(e => e.id === link.targetId);
       if (!entry) {
         console.warn(`Entry not found for targetId: ${link.targetId}`);
+        // Try to find the entry in the XML to get its full data including profiles
+        let entryName = 'Unknown Entry';
+        let entryPoints = 0;
+        let entryProfiles: BattleScribeProfile[] = [];
+        let entryRules: BattleScribeRule[] = [];
+        
+        // We need to find the entry element in the XML to parse its profiles
+        // This will be done in a separate pass after all entries are parsed
+        return { 
+          id: link.targetId, 
+          name: entryName, 
+          points: entryPoints, 
+          type: 'unknown', 
+          categoryId: '', 
+          minSelections: 0, 
+          maxSelections: -1, 
+          minPoints: 0, 
+          maxPoints: -1, 
+          minInRoster: 0, 
+          maxInRoster: -1, 
+          collective: false, 
+          hidden: false, 
+          page: 0, 
+          profiles: entryProfiles, 
+          rules: entryRules, 
+          links: [], 
+          entries: [], 
+          entryGroups: [], 
+          modifiers: [],
+          linkedEntries: [],
+          linkedEntryGroups: []
+        };
       }
-      return entry || { 
-        id: link.targetId, 
-        name: 'Unknown Entry', 
-        points: 0, 
-        type: 'unknown', 
-        categoryId: '', 
-        minSelections: 0, 
-        maxSelections: -1, 
-        minPoints: 0, 
-        maxPoints: -1, 
-        minInRoster: 0, 
-        maxInRoster: -1, 
-        collective: false, 
-        hidden: false, 
-        page: 0, 
-        profiles: [], 
-        rules: [], 
-        links: [], 
-        entries: [], 
-        entryGroups: [], 
-        modifiers: [],
-        linkedEntries: [],
-        linkedEntryGroups: []
-      };
+      return entry;
     });
 
     // Resolve linked entry groups
@@ -493,32 +508,81 @@ export class BattleScribeService {
     }));
   }
 
+  private resolveLinkedEntriesWithProfiles(entries: BattleScribeEntry[], catalogueElement: Element): BattleScribeEntry[] {
+    return entries.map(entry => {
+      // If the entry has no profiles but has an ID, try to find it in the XML
+      if (entry.profiles.length === 0 && entry.id) {
+        const entryElement = Array.from(this.querySelectorAllNS(catalogueElement, 'entry'))
+          .find((el: Element) => el.getAttribute('id') === entry.id);
+        
+        if (entryElement) {
+          // Parse the full entry data including profiles
+          const fullEntry = this.parseEntryInitial(entryElement, []);
+          return {
+            ...entry,
+            name: fullEntry.name,
+            points: fullEntry.points,
+            type: fullEntry.type,
+            profiles: fullEntry.profiles,
+            rules: fullEntry.rules
+          };
+        }
+      }
+      return entry;
+    });
+  }
+
   private parseEntryGroups(entryGroups: NodeListOf<Element>, globalRules: BattleScribeRule[], allEntries?: BattleScribeEntry[], allEntryGroups?: BattleScribeEntryGroup[], catalogueElement?: Element): BattleScribeEntryGroup[] {
     return Array.from(entryGroups).map(group => {
       // Parse links to resolve linked entries
       const links = this.parseLinks(this.querySelectorAllNS(group, 'link'));
       const entryLinks = links.filter(link => link.linkType === 'entry');
       
-      // Resolve linked entries
-      const linkedEntries = entryLinks.map(link => {
-        const entry = allEntries?.find(e => e.id === link.targetId);
-        if (!entry) {
-          console.warn(`Entry not found for targetId: ${link.targetId}`);
-                     // Try to find the entry in the XML to get its name and points
-           let entryName = 'Unknown Entry';
-           let entryPoints = 0;
-           if (catalogueElement) {
-             const entryElements = this.querySelectorAllNS(catalogueElement, 'entry');
-             const entryElement = Array.from(entryElements).find((el: Element) => el.getAttribute('id') === link.targetId);
-             if (entryElement) {
-               entryName = entryElement.getAttribute('name') || 'Unknown Entry';
-               entryPoints = parseFloat(entryElement.getAttribute('points') || '0');
+             // Resolve linked entries
+       const linkedEntries = entryLinks.map(link => {
+         const entry = allEntries?.find(e => e.id === link.targetId);
+         if (!entry) {
+           console.warn(`Entry not found for targetId: ${link.targetId}`);
+           // Try to find the entry in the XML to get its full data including profiles
+                        if (catalogueElement) {
+               const entryElements = this.querySelectorAllNS(catalogueElement, 'entry');
+               const entryElement = Array.from(entryElements).find((el: Element) => el.getAttribute('id') === link.targetId);
+               if (entryElement) {
+                                   // Parse the full entry data including profiles
+                  const fullEntry = this.parseEntryInitial(entryElement, []);
+                 return {
+                   id: link.targetId,
+                   name: fullEntry.name,
+                   points: fullEntry.points,
+                   type: fullEntry.type,
+                   categoryId: fullEntry.categoryId,
+                   minSelections: fullEntry.minSelections,
+                   maxSelections: fullEntry.maxSelections,
+                   minPoints: fullEntry.minPoints,
+                   maxPoints: fullEntry.maxPoints,
+                   minInRoster: fullEntry.minInRoster,
+                   maxInRoster: fullEntry.maxInRoster,
+                   collective: fullEntry.collective,
+                   hidden: fullEntry.hidden,
+                   page: fullEntry.page,
+                   book: fullEntry.book,
+                   profiles: fullEntry.profiles,
+                   rules: fullEntry.rules,
+                   links: fullEntry.links,
+                   entries: fullEntry.entries,
+                   entryGroups: fullEntry.entryGroups,
+                   modifiers: fullEntry.modifiers,
+                   linkedEntries: fullEntry.linkedEntries,
+                   linkedEntryGroups: fullEntry.linkedEntryGroups
+                 };
+               }
              }
-           }
+           
+           // Fallback if entry not found in XML
            return { 
              id: link.targetId, 
-             name: entryName, 
-             points: entryPoints, 
+             name: 'Unknown Entry', 
+             points: 0, 
              type: 'unknown', 
              categoryId: '', 
              minSelections: 0, 
@@ -539,26 +603,29 @@ export class BattleScribeService {
              linkedEntries: [],
              linkedEntryGroups: []
            };
-        }
-        return entry;
-      });
+         }
+         return entry;
+       });
 
       // Combine direct entries and linked entries
       const directEntries = allEntries ? this.parseEntries(this.querySelectorAllNS(group, 'entry'), globalRules, allEntries, allEntryGroups || []) : this.parseEntriesInitial(this.querySelectorAllNS(group, 'entry'), globalRules);
       const allGroupEntries = [...directEntries, ...linkedEntries];
+      
+      // Resolve profiles for linked entries if catalogueElement is available
+      const resolvedGroupEntries = catalogueElement ? this.resolveLinkedEntriesWithProfiles(allGroupEntries, catalogueElement) : allGroupEntries;
 
-      return {
-        id: group.getAttribute('id') || '',
-        name: group.getAttribute('name') || '',
-        hidden: group.getAttribute('hidden') === 'true',
-        page: parseInt(group.getAttribute('page') || '0'),
-        book: group.getAttribute('book') || undefined,
-        entries: allGroupEntries,
-        entryGroups: this.parseEntryGroups(this.querySelectorAllNS(group, 'entryGroup'), globalRules, allEntries, allEntryGroups, catalogueElement),
-        rules: this.parseRules(this.querySelectorAllNS(group, 'rule')),
-        profiles: this.parseProfiles(this.querySelectorAllNS(group, 'profile')),
-        modifiers: this.parseModifiers(this.querySelectorAllNS(group, 'modifier'))
-      };
+              return {
+          id: group.getAttribute('id') || '',
+          name: group.getAttribute('name') || '',
+          hidden: group.getAttribute('hidden') === 'true',
+          page: parseInt(group.getAttribute('page') || '0'),
+          book: group.getAttribute('book') || undefined,
+          entries: resolvedGroupEntries,
+          entryGroups: this.parseEntryGroups(this.querySelectorAllNS(group, 'entryGroup'), globalRules, allEntries, allEntryGroups, catalogueElement),
+          rules: this.parseRules(this.querySelectorAllNS(group, 'rule')),
+          profiles: this.parseProfiles(this.querySelectorAllNS(group, 'profile')),
+          modifiers: this.parseModifiers(this.querySelectorAllNS(group, 'modifier'))
+        };
     });
   }
 

@@ -286,11 +286,89 @@
   border-radius: 4px;
 }
 
-.condition-text {
-  margin: 0;
+  .condition-text {
+    margin: 0;
+    font-size: 12px;
+    color: #856404;
+    font-style: italic;
+  }
+
+  // Upgrade profiles styling
+  .upgrade-profiles {
+    margin-top: 8px;
+  }
+
+  .upgrade-profile {
+    background-color: #f0f8ff;
+    border: 1px solid #e3f2fd;
+    border-radius: 4px;
+    padding: 6px;
+    margin-bottom: 6px;
+  }
+
+  .upgrade-profile strong {
+    color: #1565c0;
+    font-size: 12px;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .upgrade-characteristic {
+    margin-left: 12px;
+    color: #666;
+    font-size: 11px;
+  }
+
+  // Entry group option profiles styling
+.option-profiles {
+  margin-top: 8px;
+}
+
+.option-profile {
+  background-color: #faf5ff;
+  border: 1px solid #e1bee7;
+  border-radius: 4px;
+  padding: 6px;
+  margin-bottom: 6px;
+}
+
+.option-profile strong {
+  color: #6a1b9a;
   font-size: 12px;
-  color: #856404;
-  font-style: italic;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.option-characteristic {
+  margin-left: 12px;
+  color: #666;
+  font-size: 11px;
+}
+
+// Selected upgrade profiles styling
+.selected-upgrade-profiles {
+  margin-top: 8px;
+}
+
+.selected-upgrade-profile {
+  background-color: #e8f5e8;
+  border: 1px solid #c8e6c9;
+  border-radius: 4px;
+  padding: 6px;
+  margin-bottom: 6px;
+}
+
+.selected-upgrade-profile strong {
+  color: #2e7d32;
+  font-size: 12px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.selected-upgrade-characteristic {
+  margin-left: 12px;
+  color: #666;
+  font-size: 11px;
 }
 
 .selected-upgrades {
