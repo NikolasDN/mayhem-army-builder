@@ -14,10 +14,12 @@ export class ModelComponent {
   @Input() quantity: number = 1;
   @Input() upgrades: BattleScribeEntry[] = [];
   @Input() armyModels: any[] = []; // Add army state input
+  @Input() customName?: string;
   @Output() quantityChange = new EventEmitter<number>();
   @Output() remove = new EventEmitter<void>();
   @Output() addUpgrade = new EventEmitter<BattleScribeEntry>();
   @Output() removeUpgrade = new EventEmitter<BattleScribeEntry>();
+  @Output() nameChange = new EventEmitter<string>();
 
   constructor(private battleScribeService: BattleScribeService) {}
   
@@ -39,6 +41,10 @@ export class ModelComponent {
     }
   }
 
+  updateName(newName: string) {
+    this.nameChange.emit(newName);
+  }
+
   removeModel() {
     this.remove.emit();
   }
@@ -49,6 +55,10 @@ export class ModelComponent {
       return total + (upgrade.points * this.quantity);
     }, 0);
     return modelPoints + upgradePoints;
+  }
+
+  get displayName(): string {
+    return this.customName || this.entry.name;
   }
 
   addUpgradeToModel(upgrade: BattleScribeEntry) {

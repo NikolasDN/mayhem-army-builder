@@ -1,6 +1,26 @@
 <div class="model-card">
   <div class="model-header">
-    <h4>{{ entry.name }}</h4>
+    <div class="model-name-section">
+      <h4>{{ displayName }}</h4>
+      <div class="name-edit-controls">
+        <input 
+          type="text" 
+          [value]="customName || ''" 
+          (input)="updateName($any($event.target).value)"
+          placeholder="Custom name (optional)"
+          class="name-edit-input"
+          title="Click to edit model name"
+        >
+        <button 
+          *ngIf="customName" 
+          (click)="updateName('')" 
+          class="reset-name-btn" 
+          title="Reset to original name"
+        >
+          Reset
+        </button>
+      </div>
+    </div>
     <button class="remove-btn" (click)="removeModel()" title="Remove model">×</button>
   </div>
   

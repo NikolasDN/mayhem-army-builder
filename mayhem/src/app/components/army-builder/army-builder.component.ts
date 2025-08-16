@@ -9,6 +9,7 @@ interface ArmyModel {
   quantity: number;
   id: string;
   upgrades: BattleScribeEntry[];
+  customName?: string; // Optional custom name for the model
 }
 
 interface SavedArmy {
@@ -110,6 +111,13 @@ export class ArmyBuilderComponent implements OnInit {
     const model = this.armyModels.find(m => m.id === modelId);
     if (model) {
       model.quantity = newQuantity;
+    }
+  }
+
+  updateModelName(modelId: string, newName: string) {
+    const model = this.armyModels.find(m => m.id === modelId);
+    if (model) {
+      model.customName = newName.trim() || undefined; // Remove custom name if empty
     }
   }
 
@@ -278,6 +286,10 @@ export class ArmyBuilderComponent implements OnInit {
     const basePoints = model.entry.points * model.quantity;
     const upgradePoints = model.upgrades.reduce((total, upgrade) => total + upgrade.points, 0) * model.quantity;
     return basePoints + upgradePoints;
+  }
+
+  getModelDisplayName(model: ArmyModel): string {
+    return model.customName || model.entry.name;
   }
 
   addUpgradeToModel(modelId: string, upgrade: BattleScribeEntry) {
