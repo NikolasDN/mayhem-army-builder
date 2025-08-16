@@ -255,7 +255,7 @@ export class BattleScribeService {
     // Third pass: resolve linked entries with their full profiles
     const entriesWithProfiles = finalEntries.map(entry => ({
       ...entry,
-      linkedEntries: this.resolveLinkedEntriesWithProfiles(entry.linkedEntries, catalogueElement)
+      linkedEntries: this.resolveLinkedEntriesWithProfiles(entry.linkedEntries, catalogueElement, globalRules)
     }));
     
     // Create a map of all entries by ID for quick lookup
@@ -508,16 +508,16 @@ export class BattleScribeService {
     }));
   }
 
-  private resolveLinkedEntriesWithProfiles(entries: BattleScribeEntry[], catalogueElement: Element): BattleScribeEntry[] {
+  private resolveLinkedEntriesWithProfiles(entries: BattleScribeEntry[], catalogueElement: Element, globalRules: BattleScribeRule[]): BattleScribeEntry[] {
     return entries.map(entry => {
-      // If the entry has no profiles but has an ID, try to find it in the XML
-      if (entry.profiles.length === 0 && entry.id) {
+      // If the entry has no profiles or no rules but has an ID, try to find it in the XML
+      if ((entry.profiles.length === 0 || entry.rules.length === 0) && entry.id) {
         const entryElement = Array.from(this.querySelectorAllNS(catalogueElement, 'entry'))
           .find((el: Element) => el.getAttribute('id') === entry.id);
         
         if (entryElement) {
-          // Parse the full entry data including profiles
-          const fullEntry = this.parseEntryInitial(entryElement, []);
+          // Parse the full entry data including profiles and rules
+          const fullEntry = this.parseEntryInitial(entryElement, globalRules);
           return {
             ...entry,
             name: fullEntry.name,
@@ -548,8 +548,8 @@ export class BattleScribeService {
                const entryElements = this.querySelectorAllNS(catalogueElement, 'entry');
                const entryElement = Array.from(entryElements).find((el: Element) => el.getAttribute('id') === link.targetId);
                if (entryElement) {
-                                   // Parse the full entry data including profiles
-                  const fullEntry = this.parseEntryInitial(entryElement, []);
+                                                  // Parse the full entry data including profiles
+               const fullEntry = this.parseEntryInitial(entryElement, globalRules);
                  return {
                    id: link.targetId,
                    name: fullEntry.name,
@@ -612,7 +612,7 @@ export class BattleScribeService {
       const allGroupEntries = [...directEntries, ...linkedEntries];
       
       // Resolve profiles for linked entries if catalogueElement is available
-      const resolvedGroupEntries = catalogueElement ? this.resolveLinkedEntriesWithProfiles(allGroupEntries, catalogueElement) : allGroupEntries;
+             const resolvedGroupEntries = catalogueElement ? this.resolveLinkedEntriesWithProfiles(allGroupEntries, catalogueElement, globalRules) : allGroupEntries;
 
               return {
           id: group.getAttribute('id') || '',

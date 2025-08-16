@@ -345,6 +345,60 @@
   font-size: 11px;
 }
 
+// Upgrade rules styling
+.upgrade-rules {
+  margin-top: 8px;
+}
+
+.upgrade-rule {
+  background-color: #fff8e1;
+  border: 1px solid #ffd54f;
+  border-radius: 4px;
+  padding: 6px;
+  margin-bottom: 6px;
+}
+
+.upgrade-rule strong {
+  color: #f57c00;
+  font-size: 12px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.upgrade-rule p {
+  margin: 0;
+  color: #666;
+  font-size: 11px;
+  font-style: italic;
+}
+
+// Entry group option rules styling
+.option-rules {
+  margin-top: 8px;
+}
+
+.option-rule {
+  background-color: #fce4ec;
+  border: 1px solid #f48fb1;
+  border-radius: 4px;
+  padding: 6px;
+  margin-bottom: 6px;
+}
+
+.option-rule strong {
+  color: #c2185b;
+  font-size: 12px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.option-rule p {
+  margin: 0;
+  color: #666;
+  font-size: 11px;
+  font-style: italic;
+}
+
 // Selected upgrade profiles styling
 .selected-upgrade-profiles {
   margin-top: 8px;
@@ -369,6 +423,33 @@
   margin-left: 12px;
   color: #666;
   font-size: 11px;
+}
+
+// Selected upgrade rules styling
+.selected-upgrade-rules {
+  margin-top: 8px;
+}
+
+.selected-upgrade-rule {
+  background-color: #fff3e0;
+  border: 1px solid #ffcc02;
+  border-radius: 4px;
+  padding: 6px;
+  margin-bottom: 6px;
+}
+
+.selected-upgrade-rule strong {
+  color: #e65100;
+  font-size: 12px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.selected-upgrade-rule p {
+  margin: 0;
+  color: #666;
+  font-size: 11px;
+  font-style: italic;
 }
 
 .selected-upgrades {

@@ -266,6 +266,14 @@ export class ArmyBuilderComponent implements OnInit {
     return uniqueSpecials.join(', ');
   }
 
+  hasUpgradeRules(model: ArmyModel): boolean {
+    return model.upgrades && model.upgrades.some(upgrade => upgrade.rules && upgrade.rules.length > 0);
+  }
+
+  hasModelRules(model: ArmyModel): boolean {
+    return model.entry.rules && model.entry.rules.length > 0;
+  }
+
   getModelTotalPoints(model: ArmyModel): number {
     const basePoints = model.entry.points * model.quantity;
     const upgradePoints = model.upgrades.reduce((total, upgrade) => total + upgrade.points, 0) * model.quantity;

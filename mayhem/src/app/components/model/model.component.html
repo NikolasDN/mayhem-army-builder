@@ -65,6 +65,14 @@
               </div>
             </div>
           </div>
+          
+          <!-- Show rules for selected upgrades -->
+          <div *ngIf="upgrade.rules.length > 0" class="selected-upgrade-rules">
+            <div *ngFor="let rule of upgrade.rules" class="selected-upgrade-rule">
+              <strong>{{ rule.name }}</strong>
+              <p *ngIf="rule.description">{{ rule.description }}</p>
+            </div>
+          </div>
         </div>
         <button (click)="removeUpgradeFromModel(upgrade)" class="remove-upgrade-btn">Remove</button>
       </div>
@@ -92,6 +100,14 @@
                        <div *ngFor="let char of profile.characteristics" class="upgrade-characteristic">
                          {{ char.name }}: {{ char.value }}
                        </div>
+                     </div>
+                   </div>
+                   
+                   <!-- Show rules for upgrades -->
+                   <div *ngIf="upgrade.rules.length > 0" class="upgrade-rules">
+                     <div *ngFor="let rule of upgrade.rules" class="upgrade-rule">
+                       <strong>{{ rule.name }}</strong>
+                       <p *ngIf="rule.description">{{ rule.description }}</p>
                      </div>
                    </div>
                  </div>
@@ -140,6 +156,14 @@
                        <div *ngFor="let char of profile.characteristics" class="option-characteristic">
                          {{ char.name }}: {{ char.value }}
                        </div>
+                     </div>
+                   </div>
+                   
+                   <!-- Show rules for entry group options -->
+                   <div *ngIf="option.rules.length > 0" class="option-rules">
+                     <div *ngFor="let rule of option.rules" class="option-rule">
+                       <strong>{{ rule.name }}</strong>
+                       <p *ngIf="rule.description">{{ rule.description }}</p>
                      </div>
                    </div>
                  </div>

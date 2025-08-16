@@ -493,3 +493,56 @@
 .army-table .total-points {
   text-align: right;
 }
+
+// Upgrade rules rows in print table
+.upgrade-rules-row {
+  background-color: #f9f9f9;
+}
+
+.upgrade-rules-cell {
+  padding: 8px 12px !important;
+  font-size: 11px !important;
+}
+
+.upgrade-rules-print {
+  border-left: 3px solid #1976d2;
+  padding-left: 8px;
+}
+
+.upgrade-rule-print {
+  margin-bottom: 8px;
+}
+
+.upgrade-rule-print strong {
+  color: #1976d2;
+  font-size: 12px;
+}
+
+.upgrade-rule-detail {
+  margin-left: 12px;
+  margin-top: 2px;
+  color: #666;
+  font-size: 11px;
+}
+
+// Model rules rows in print table
+.model-rules-row {
+  background-color: #f0f8ff;
+}
+
+.model-rules-cell {
+  padding: 8px 12px !important;
+  font-size: 11px !important;
+}
+
+.model-rules-print {
+  border-left: 3px solid #ff9800;
+  padding-left: 8px;
+}
+
+.model-rule-detail {
+  margin-left: 12px;
+  margin-top: 2px;
+  color: #666;
+  font-size: 11px;
+}
