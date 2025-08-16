@@ -197,16 +197,79 @@ export class ArmyBuilderComponent implements OnInit {
     }
   }
 
-  printArmy() {
+    printArmy() {
     // Expand all sections in all model components for printing
     this.modelComponents.forEach(modelComponent => {
       modelComponent.expandForPrint();
     });
-    
+
     // Small delay to ensure DOM updates are complete
     setTimeout(() => {
       window.print();
     }, 100);
+  }
+
+  // Helper methods for the print table
+  getProfileValue(entry: BattleScribeEntry, characteristicName: string): string {
+    for (const profile of entry.profiles) {
+      const characteristic = profile.characteristics.find(char => char.name === characteristicName);
+      if (characteristic) {
+        return characteristic.value;
+      }
+    }
+    return '-';
+  }
+
+  getUpgradeProfileValue(upgrades: BattleScribeEntry[], characteristicName: string): string {
+    for (const upgrade of upgrades) {
+      for (const profile of upgrade.profiles) {
+        const characteristic = profile.characteristics.find(char => char.name === characteristicName);
+        if (characteristic) {
+          return characteristic.value;
+        }
+      }
+    }
+    return '-';
+  }
+
+  getUpgradeNames(upgrades: BattleScribeEntry[]): string {
+    if (upgrades.length === 0) return '-';
+    return upgrades.map(upgrade => upgrade.name).join(', ');
+  }
+
+  getSpecials(model: ArmyModel): string {
+    const specials: string[] = [];
+    
+    // Add model rules
+    if (model.entry.rules && model.entry.rules.length > 0) {
+      specials.push(...model.entry.rules.map(rule => rule.name));
+    }
+    
+    // Add upgrade names
+    if (model.upgrades && model.upgrades.length > 0) {
+      specials.push(...model.upgrades.map(upgrade => upgrade.name));
+    }
+    
+    // Add upgrade rules
+    if (model.upgrades && model.upgrades.length > 0) {
+      for (const upgrade of model.upgrades) {
+        if (upgrade.rules && upgrade.rules.length > 0) {
+          specials.push(...upgrade.rules.map(rule => rule.name));
+        }
+      }
+    }
+    
+    if (specials.length === 0) return '-';
+    
+    // Remove duplicates while preserving order
+    const uniqueSpecials = [...new Set(specials)];
+    return uniqueSpecials.join(', ');
+  }
+
+  getModelTotalPoints(model: ArmyModel): number {
+    const basePoints = model.entry.points * model.quantity;
+    const upgradePoints = model.upgrades.reduce((total, upgrade) => total + upgrade.points, 0) * model.quantity;
+    return basePoints + upgradePoints;
   }
 
   addUpgradeToModel(modelId: string, upgrade: BattleScribeEntry) {

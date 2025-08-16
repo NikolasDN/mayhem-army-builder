@@ -108,5 +108,43 @@
           </div>
         </div>
       </div>
+      
+      <!-- Print Table (hidden by default, shown only when printing) -->
+      <div class="print-table" style="display: none;">
+        <table class="army-table">
+          <thead>
+            <tr>
+              <th>Amount</th>
+              <th>Name</th>
+              <th>MOV</th>
+              <th>CQ</th>
+              <th>BAR</th>
+              <th>Range</th>
+              <th>Damage</th>
+              <th>Specials</th>
+              <th>Points</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let model of armyModels" class="army-row">
+              <td class="amount">{{ model.quantity }}</td>
+              <td class="name">{{ model.entry.name }}</td>
+              <td class="mov">{{ getProfileValue(model.entry, 'MOV') }}</td>
+              <td class="cq">{{ getProfileValue(model.entry, 'CQ') }}</td>
+              <td class="bar">{{ getProfileValue(model.entry, 'BAR') }}</td>
+              <td class="range">{{ getUpgradeProfileValue(model.upgrades, 'Range') }}</td>
+              <td class="damage">{{ getUpgradeProfileValue(model.upgrades, 'Damage') }}</td>
+                             <td class="specials">{{ getSpecials(model) }}</td>
+              <td class="points">{{ getModelTotalPoints(model) }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="total-row">
+              <td colspan="8"><strong>Total Points:</strong></td>
+              <td class="total-points"><strong>{{ totalPoints }}</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
   </div>
 </div>

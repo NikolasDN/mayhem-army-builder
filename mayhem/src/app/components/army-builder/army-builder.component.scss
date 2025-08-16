@@ -361,7 +361,8 @@
   .left-panel,
   .army-controls,
   .saved-armies-section,
-  .print-button {
+  .print-button,
+  .right-panel h3 {
     display: none !important;
   }
   
@@ -374,12 +375,22 @@
   .right-panel {
     width: 100% !important;
     max-width: none !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
   
-  // Make army list more print-friendly
+  // Hide the detailed army models view
   .army-models {
-    max-height: none !important;
-    overflow: visible !important;
+    display: none !important;
+  }
+  
+  // Show the print table
+  .print-table {
+    display: block !important;
+    margin-top: 20px !important;
   }
   
   // Ensure good contrast for print
@@ -388,12 +399,44 @@
     color: black !important;
   }
   
-  // Remove shadows and borders for cleaner print
-  .model-card {
-    box-shadow: none !important;
-    border: 1px solid #ccc !important;
-    margin-bottom: 16px !important;
-    page-break-inside: avoid;
+  // Table styles for print
+  .army-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 12px !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .army-table th,
+  .army-table td {
+    border: 1px solid #000 !important;
+    padding: 4px 6px !important;
+    text-align: left !important;
+    vertical-align: top !important;
+  }
+  
+  .army-table th {
+    background-color: #f0f0f0 !important;
+    font-weight: bold !important;
+    text-align: center !important;
+  }
+  
+  .army-table .amount {
+    text-align: center !important;
+    font-weight: bold !important;
+  }
+  
+  .army-table .points {
+    text-align: right !important;
+  }
+  
+  .army-table .total-row {
+    background-color: #f0f0f0 !important;
+    font-weight: bold !important;
+  }
+  
+  .army-table .total-points {
+    text-align: right !important;
   }
   
   // Ensure headers are visible
@@ -406,4 +449,47 @@
     font-size: 12pt !important;
     line-height: 1.4 !important;
   }
+}
+
+// Print table styles (hidden by default)
+.print-table {
+  display: none;
+}
+
+.army-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.army-table th,
+.army-table td {
+  border: 1px solid #ddd;
+  padding: 4px 6px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.army-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+  text-align: center;
+}
+
+.army-table .amount {
+  text-align: center;
+  font-weight: bold;
+}
+
+.army-table .points {
+  text-align: right;
+}
+
+.army-table .total-row {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.army-table .total-points {
+  text-align: right;
 }
