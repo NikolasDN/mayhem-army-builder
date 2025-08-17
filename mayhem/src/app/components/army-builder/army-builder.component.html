@@ -136,8 +136,8 @@
                   <td class="mov">{{ getProfileValue(model.entry, 'MOV') }}</td>
                   <td class="cq">{{ getProfileValue(model.entry, 'CQ') }}</td>
                   <td class="bar">{{ getProfileValue(model.entry, 'BAR') }}</td>
-                  <td class="range">{{ getUpgradeProfileValue(model.upgrades, 'Range') }}</td>
-                  <td class="damage">{{ getUpgradeProfileValue(model.upgrades, 'Damage') }}</td>
+                  <td class="range">{{ getModelOrUpgradeProfileValue(model, 'Range') }}</td>
+                  <td class="damage">{{ getModelOrUpgradeProfileValue(model, 'Damage') }}</td>
                   <td class="specials">{{ getSpecials(model) }}</td>
                   <td class="points">{{ getModelTotalPoints(model) }}</td>
                 </tr>

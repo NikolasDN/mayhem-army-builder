@@ -248,6 +248,18 @@ export class ArmyBuilderComponent implements OnInit {
     return '-';
   }
 
+  // Get profile value from model or upgrades, prioritizing model's own profile
+  getModelOrUpgradeProfileValue(model: ArmyModel, characteristicName: string): string {
+    // First check if the model has this characteristic
+    const modelValue = this.getProfileValue(model.entry, characteristicName);
+    if (modelValue !== '-') {
+      return modelValue;
+    }
+    
+    // If model doesn't have it, check upgrades
+    return this.getUpgradeProfileValue(model.upgrades, characteristicName);
+  }
+
   getUpgradeNames(upgrades: BattleScribeEntry[]): string {
     if (upgrades.length === 0) return '-';
     return upgrades.map(upgrade => upgrade.name).join(', ');
