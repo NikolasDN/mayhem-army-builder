@@ -1,4 +1,69 @@
-/* You can add global styles to this file, and also import other style files */
+/* Diablo Font */
+@font-face {
+  font-family: 'Diablo';
+  src: url('/font/diablo.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Full page background */
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-image: url('/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: Arial, sans-serif;
+}
+body { background-color: transparent; }
+app-root { display: block; min-height: 100vh; }
+
+/* Diablo font for titles and headings only */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Diablo', Arial, sans-serif;
+}
+
+/* Dark panel backgrounds with transparency */
+.dark-panel {
+  background-color: rgba(64, 64, 64, 0.5) !important;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  font-family: Arial, sans-serif;
+}
+.dark-panel h1, .dark-panel h2, .dark-panel h3, .dark-panel h4, .dark-panel h5, .dark-panel h6 {
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  font-family: 'Diablo', Arial, sans-serif;
+}
+.dark-panel p, .dark-panel span, .dark-panel div {
+  color: #f0f0f0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  font-family: Arial, sans-serif;
+}
+.dark-panel label {
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+}
+
+/* Global font application */
+* {
+  font-family: Arial, sans-serif;
+}
+
+/* Ensure specific elements use Diablo font */
+h1, h2, h3, h4, h5, h6,
+p, span, div, label, input, button, textarea, select,
+.army-builder-container, .model-card, .entry-item, .stat {
+  font-family: Arial, sans-serif;
+}
 
 /* Common utility classes */
 .btn {
@@ -103,4 +168,10 @@
   --info: #2196f3;
   --purple: #9c27b0;
   --purple-dark: #7b1fa2;
+  
+  /* Dark panel colors */
+  --dark-panel-bg: rgba(64, 64, 64, 0.5);
+  --dark-panel-border: rgba(128, 128, 128, 0.3);
+  --dark-panel-text: #ffffff;
+  --dark-panel-text-secondary: #f0f0f0;
 }

@@ -6,7 +6,8 @@
 }
 
 .header {
-  background-color: #f5f5f5;
+  background-color: rgba(64, 64, 64, 0.5);
+  backdrop-filter: blur(5px);
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 20px;
@@ -15,12 +16,18 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  font-family: Arial, sans-serif;
 }
 
 .header h2 {
   margin: 0;
-  color: #1976d2;
+  color: #ffffff;
   font-size: 28px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  font-family: 'Diablo', Arial, sans-serif;
 }
 
 .army-info {
@@ -32,10 +39,23 @@
 
 .army-name-input {
   padding: 8px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(128, 128, 128, 0.5);
   border-radius: 4px;
   font-size: 16px;
   min-width: 200px;
+  background-color: rgba(48, 48, 48, 0.8);
+  color: #ffffff;
+  
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: #1976d2;
+    background-color: rgba(64, 64, 64, 0.9);
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  }
 }
 
 .stats {
@@ -45,24 +65,28 @@
 
 .stat {
   font-size: 16px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .stat strong {
-  color: #1976d2;
+  color: #ffffff;
   font-size: 18px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
 }
 
 .loading, .error {
   text-align: center;
   padding: 40px;
   font-size: 18px;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .error {
-  color: #d32f2f;
-  background-color: #ffebee;
-  border: 1px solid #f44336;
+  color: #ffcdd2;
+  background-color: rgba(244, 67, 54, 0.3);
+  border: 1px solid rgba(244, 67, 54, 0.5);
   border-radius: 4px;
 }
 
@@ -74,69 +98,78 @@
 }
 
 .left-panel, .right-panel {
-  background-color: white;
-  border: 1px solid #ddd;
+  background-color: rgba(64, 64, 64, 0.5);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(128, 128, 128, 0.3);
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .left-panel h3, .right-panel h3 {
   margin-top: 0;
-  color: #1976d2;
-  border-bottom: 2px solid #e3f2fd;
+  color: #ffffff;
+  border-bottom: 2px solid rgba(128, 128, 128, 0.3);
   padding-bottom: 10px;
   margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  font-family: 'Diablo', Arial, sans-serif;
 }
 
 .entries-list {
   max-height: 400px;
   overflow-y: auto;
-  border: 1px solid #eee;
+  border: 1px solid rgba(128, 128, 128, 0.3);
   border-radius: 4px;
+  background-color: rgba(48, 48, 48, 0.3);
 }
 
 .entry-item {
   padding: 12px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.2);
   cursor: pointer;
   transition: background-color 0.2s;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .entry-item:hover {
-  background-color: #f5f5f5;
+  background-color: rgba(128, 128, 128, 0.3);
 }
 
 .entry-item.selected {
-  background-color: #e3f2fd;
+  background-color: rgba(25, 118, 210, 0.3);
   border-left: 4px solid #1976d2;
 }
 
 .entry-item.unavailable {
-  background-color: #f5f5f5;
-  border-color: #ccc;
+  background-color: rgba(64, 64, 64, 0.3);
+  border-color: rgba(128, 128, 128, 0.5);
   opacity: 0.6;
   cursor: not-allowed;
 }
 
 .entry-item.unavailable:hover {
-  background-color: #f5f5f5;
-  border-color: #ccc;
+  background-color: rgba(64, 64, 64, 0.3);
+  border-color: rgba(128, 128, 128, 0.5);
 }
 
 .condition-info {
   margin-top: 8px;
   padding: 6px;
-  background-color: #fff3cd;
-  border: 1px solid #ffeaa7;
+  background-color: rgba(255, 193, 7, 0.3);
+  border: 1px solid rgba(255, 193, 7, 0.5);
   border-radius: 4px;
 }
 
 .condition-text {
   margin: 0;
   font-size: 12px;
-  color: #856404;
+  color: #ffffff;
   font-style: italic;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .entry-item:last-child {
@@ -145,14 +178,16 @@
 
 .entry-info h4 {
   margin: 0 0 8px 0;
-  color: #1976d2;
+  color: #ffffff;
   font-size: 16px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
 }
 
 .entry-info p {
   margin: 4px 0;
   font-size: 14px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .add-button-container {
@@ -215,21 +250,23 @@
 .saved-armies-section {
   margin-top: 32px;
   padding-top: 24px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid rgba(128, 128, 128, 0.3);
 }
 
 .saved-armies-section h3 {
-  color: #1976d2;
+  color: #ffffff;
   margin-bottom: 16px;
   font-size: 18px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  font-family: 'Diablo', Arial, sans-serif;
 }
 
 .empty-saved-armies {
   text-align: center;
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
   font-style: italic;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: rgba(64, 64, 64, 0.3);
   border-radius: 8px;
 }
 
@@ -244,16 +281,20 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  background-color: white;
-  border: 1px solid #e0e0e0;
+  background-color: rgba(64, 64, 64, 0.5);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(128, 128, 128, 0.3);
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .saved-army-info h4 {
   margin: 0 0 8px 0;
-  color: #1976d2;
+  color: #ffffff;
   font-size: 16px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
 }
 
 .saved-army-stats {
@@ -264,15 +305,16 @@
 
 .saved-army-stats span {
   font-size: 12px;
-  color: #666;
-  background-color: #f0f0f0;
+  color: #ffffff;
+  background-color: rgba(128, 128, 128, 0.5);
   padding: 2px 6px;
   border-radius: 4px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .saved-army-date {
   font-size: 11px;
-  color: #999;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .saved-army-actions {
@@ -311,7 +353,7 @@
 .empty-army {
   text-align: center;
   padding: 40px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
   font-style: italic;
 }
 
@@ -376,11 +418,12 @@
   .right-panel {
     width: 100% !important;
     max-width: none !important;
-    background: none !important;
+    background: white !important;
     border: none !important;
     box-shadow: none !important;
-    padding: 0 !important;
+    padding: 20px !important;
     margin: 0 !important;
+    color: black !important;
   }
   
   // Hide the detailed army models view
@@ -400,12 +443,88 @@
     color: black !important;
   }
   
+  // Override all dark theme effects for print
+  .header,
+  .left-panel,
+  .right-panel,
+  .saved-army-item,
+  .entry-item,
+  .entries-list,
+  .condition-info,
+  .empty-saved-armies {
+    background: white !important;
+    color: black !important;
+    text-shadow: none !important;
+    backdrop-filter: none !important;
+    border-color: #000 !important;
+  }
+  
+  // Specific overrides for header and stats in print
+  .header {
+    background: white !important;
+    color: black !important;
+    text-shadow: none !important;
+    backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  .header h2 {
+    color: black !important;
+    text-shadow: none !important;
+  }
+  
+  .stats {
+    color: black !important;
+    text-shadow: none !important;
+    border: none !important;
+    background: none !important;
+  }
+  
+  .stat {
+    color: black !important;
+    text-shadow: none !important;
+    border: none !important;
+    background: none !important;
+  }
+  
+  .stat strong {
+    color: black !important;
+    text-shadow: none !important;
+  }
+  
+  .army-name-input {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #000 !important;
+    text-shadow: none !important;
+  }
+  
+  // Remove all borders and backgrounds in print view
+  .army-info {
+    border: none !important;
+    background: none !important;
+  }
+  
+  // Ensure no borders show in print
+  * {
+    border-color: transparent !important;
+  }
+  
+  // Only show borders for table elements that need them
+  .army-table th,
+  .army-table td {
+    border: 1px solid #000 !important;
+  }
+  
   // Table styles for print
   .army-table {
     width: 100% !important;
     border-collapse: collapse !important;
     font-size: 12px !important;
     page-break-inside: avoid !important;
+    background: white !important;
+    color: black !important;
   }
   
   .army-table th,
@@ -414,12 +533,16 @@
     padding: 4px 6px !important;
     text-align: left !important;
     vertical-align: top !important;
+    background: white !important;
+    color: black !important;
+    text-shadow: none !important;
   }
   
   .army-table th {
     background-color: #f0f0f0 !important;
     font-weight: bold !important;
     text-align: center !important;
+    color: black !important;
   }
   
   .army-table .amount {
@@ -443,12 +566,35 @@
   // Ensure headers are visible
   h2, h3, h4 {
     color: black !important;
+    text-shadow: none !important;
   }
   
   // Make sure text is readable
   body {
     font-size: 12pt !important;
     line-height: 1.4 !important;
+    color: black !important;
+    text-shadow: none !important;
+  }
+  
+  // Override upgrade and model rules for print
+  .upgrade-rules-row {
+    background-color: #f9f9f9 !important;
+  }
+  
+  .model-rules-row {
+    background-color: #f0f8ff !important;
+  }
+  
+  .upgrade-rule-print strong {
+    color: black !important;
+    text-shadow: none !important;
+  }
+  
+  .upgrade-rule-detail,
+  .model-rule-detail {
+    color: black !important;
+    text-shadow: none !important;
   }
 }
 
@@ -465,16 +611,20 @@
 
 .army-table th,
 .army-table td {
-  border: 1px solid #ddd;
+  border: 1px solid rgba(128, 128, 128, 0.3);
   padding: 4px 6px;
   text-align: left;
   vertical-align: top;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .army-table th {
-  background-color: #f0f0f0;
+  background-color: rgba(64, 64, 64, 0.7);
   font-weight: bold;
   text-align: center;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
 }
 
 .army-table .amount {
@@ -487,7 +637,7 @@
 }
 
 .army-table .total-row {
-  background-color: #f0f0f0;
+  background-color: rgba(64, 64, 64, 0.7);
   font-weight: bold;
 }
 
@@ -497,7 +647,7 @@
 
 // Upgrade rules rows in print table
 .upgrade-rules-row {
-  background-color: #f9f9f9;
+  background-color: rgba(76, 175, 80, 0.2);
 }
 
 .upgrade-rules-cell {
@@ -515,20 +665,21 @@
 }
 
 .upgrade-rule-print strong {
-  color: #1976d2;
+  color: #ffffff;
   font-size: 12px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .upgrade-rule-detail {
   margin-left: 12px;
   margin-top: 2px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.8);
   font-size: 11px;
 }
 
 // Model rules rows in print table
 .model-rules-row {
-  background-color: #f0f8ff;
+  background-color: rgba(255, 152, 0, 0.2);
 }
 
 .model-rules-cell {
@@ -544,6 +695,6 @@
 .model-rule-detail {
   margin-left: 12px;
   margin-top: 2px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.8);
   font-size: 11px;
 }
