@@ -1,10 +1,26 @@
 /* Diablo Font */
 @font-face {
   font-family: 'Diablo';
-  src: url('/font/diablo.ttf') format('truetype');
+  src: url('assets/diablo.ttf') format('truetype'),
+       url('assets/diablo.ttf') format('opentype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
+}
+
+/* Fallback font loading */
+@font-face {
+  font-family: 'Diablo-Fallback';
+  src: local('Arial Black'), local('Impact'), local('Georgia');
+  font-weight: bold;
+}
+
+/* Font loading test - this will help debug if the font is loading */
+.diablo-font-test {
+  font-family: 'Diablo', 'Diablo-Fallback', Arial Black, Impact, Arial, sans-serif;
+  font-size: 24px;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
 }
 
 /* Full page background */
@@ -12,7 +28,7 @@ html, body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background-image: url('/background.png');
+  background-image: url('assets/background.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -24,7 +40,7 @@ app-root { display: block; min-height: 100vh; }
 
 /* Diablo font for titles and headings only */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Diablo', Arial, sans-serif;
+  font-family: 'Diablo', 'Diablo-Fallback', Arial Black, Impact, Arial, sans-serif;
 }
 
 /* Dark panel backgrounds with transparency */
