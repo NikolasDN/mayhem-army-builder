@@ -38,6 +38,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     
     steps:
     - name: Checkout
@@ -49,9 +53,23 @@ jobs:
         name: dist-files
         path: dist/mayhem
         
+    - name: List files in dist
+      run: ls -la dist/mayhem
+      
+    - name: Check repository status
+      run: |
+        echo "Current branch: $(git branch --show-current)"
+        echo "Remote branches:"
+        git branch -r
+        echo "Git status:"
+        git status
+        
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./dist/mayhem
         force_orphan: true
+        enable_jekyll: false
+        user_name: 'github-actions[bot]'
+        user_email: 'github-actions[bot]@users.noreply.github.com'
