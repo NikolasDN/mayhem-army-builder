@@ -1,6 +1,6 @@
 .model-card {
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 16px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -38,13 +38,13 @@
   font-size: 12px;
   width: 150px;
   background-color: #f9f9f9;
-}
-
-.name-edit-input:focus {
-  outline: none;
-  border-color: #1976d2;
-  background-color: white;
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  
+  &:focus {
+    outline: none;
+    border-color: #1976d2;
+    background-color: white;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  }
 }
 
 .reset-name-btn {
@@ -56,11 +56,11 @@
   font-size: 10px;
   cursor: pointer;
   transition: all 0.2s;
-}
-
-.reset-name-btn:hover {
-  background-color: #ffe0b2;
-  border-color: #f57c00;
+  
+  &:hover {
+    background-color: #ffe0b2;
+    border-color: #f57c00;
+  }
 }
 
 .remove-btn {
@@ -76,19 +76,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.remove-btn:hover {
-  background-color: #d32f2f;
+  font-weight: bold;
+  transition: all 0.2s;
+  
+  &:hover {
+    background-color: #d32f2f;
+  }
 }
 
 .model-details {
   margin-bottom: 16px;
-}
-
-.model-details p {
-  margin: 4px 0;
-  font-size: 14px;
+  
+  p {
+    margin: 4px 0;
+    font-size: 14px;
+  }
 }
 
 .quantity-controls {
@@ -96,38 +98,39 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 16px;
-}
-
-.quantity-controls label {
-  font-weight: bold;
-  color: #666;
+  
+  label {
+    font-weight: bold;
+    color: #666;
+  }
 }
 
 .quantity-buttons {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.quantity-buttons button {
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.quantity-buttons button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.quantity-buttons button:hover:not(:disabled) {
-  background-color: #1565c0;
+  
+  button {
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.2s;
+    
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    
+    &:hover:not(:disabled) {
+      background-color: #1565c0;
+    }
+  }
 }
 
 .quantity-display {
@@ -138,32 +141,23 @@
   color: #1976d2;
 }
 
-.profiles, .rules {
-  margin-top: 16px;
-}
-
-.profiles h5, .rules h5 {
-  color: #666;
+// Section headers
+.profiles h5, .rules h5, .upgrades h5, .selected-upgrades h5, .entry-groups h5 {
   margin-bottom: 8px;
   font-size: 14px;
   border-bottom: 1px solid #eee;
   padding-bottom: 4px;
-}
-
-.profile, .rule {
-  background-color: #f9f9f9;
-  padding: 8px;
-  margin-bottom: 8px;
-  border-radius: 4px;
-  font-size: 13px;
-}
-
-.rules h5 {
-  color: #d32f2f;
   font-weight: bold;
 }
 
-.rules-header {
+.profiles h5, .rules h5 { color: #666; }
+.rules h5 { color: #d32f2f; }
+.upgrades h5 { color: #4caf50; }
+.selected-upgrades h5 { color: #2196f3; }
+.entry-groups h5 { color: #9c27b0; }
+
+// Section headers
+.rules-header, .upgrades-header, .selected-upgrades-header, .entry-groups-header {
   cursor: pointer;
   user-select: none;
   display: flex;
@@ -172,37 +166,47 @@
   padding: 8px 0;
 }
 
-.rules-header:hover {
-  color: #b71c1c;
-}
+.rules-header:hover { color: #b71c1c; }
+.upgrades-header:hover { color: #45a049; }
+.selected-upgrades-header:hover { color: #1976d2; }
+.entry-groups-header:hover { color: #7b1fa2; }
 
 .expand-icon {
   font-size: 12px;
   color: #666;
 }
 
-.rules-content {
+// Section content
+.rules-content, .upgrades-content, .selected-upgrades-content, .entry-groups-content {
   margin-top: 8px;
 }
+
+// Common item styles
+.profile, .rule, .upgrade, .selected-upgrade, .entry-group {
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.profile, .rule { background-color: #f9f9f9; }
 
 .rule {
   background-color: #fff3e0;
   border-left: 3px solid #ff9800;
-  padding: 12px;
-  margin-bottom: 10px;
-}
-
-.rule strong {
-  color: #e65100;
-  font-size: 14px;
-  display: block;
-  margin-bottom: 4px;
-}
-
-.rule p {
-  margin: 4px 0 0 0;
-  color: #333;
-  line-height: 1.4;
+  
+  strong {
+    color: #f57c00;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 4px;
+  }
+  
+  p {
+    margin: 4px 0 0 0;
+    color: #333;
+    line-height: 1.4;
+  }
 }
 
 .no-description {
@@ -217,60 +221,44 @@
   font-size: 12px;
 }
 
-.upgrades {
-  margin-top: 16px;
-}
-
-.upgrades h5 {
-  color: #4caf50;
-  font-weight: bold;
-}
-
-.upgrades-header {
-  cursor: pointer;
-  user-select: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-}
-
-.upgrades-header:hover {
-  color: #45a049;
-}
-
-.upgrades-content {
-  margin-top: 8px;
-}
-
+// Upgrades
 .upgrade {
   background-color: #f1f8e9;
   border-left: 3px solid #4caf50;
-  padding: 12px;
-  margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  
+  &.unavailable {
+    background-color: #f5f5f5;
+    border-color: #ccc;
+    opacity: 0.6;
+    
+    &:hover {
+      background-color: #f5f5f5;
+      border-color: #ccc;
+    }
+  }
 }
 
 .upgrade-info {
   flex: 1;
-}
-
-.upgrade-info strong {
-  color: #2e7d32;
-  font-size: 14px;
-  display: block;
-  margin-bottom: 4px;
+  
+  strong {
+    color: #2e7d32;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 4px;
+  }
 }
 
 .upgrade-points {
-  font-size: 12px;
+  font-size: 11px;
   color: #666;
   background-color: #e8f5e8;
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-left: 8px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 6px;
 }
 
 .add-upgrade-btn {
@@ -282,42 +270,32 @@
   cursor: pointer;
   font-size: 12px;
   font-weight: bold;
-}
-
-.add-upgrade-btn:hover {
-  background-color: #45a049;
-}
-
-.add-upgrade-btn.disabled {
-  background-color: #ccc;
-  color: #666;
-  cursor: not-allowed;
-}
-
-.add-upgrade-btn.disabled:hover {
-  background-color: #ccc;
-}
-
-.upgrade.unavailable {
-  background-color: #f5f5f5;
-  border-color: #ccc;
-  opacity: 0.6;
-}
-
-.upgrade.unavailable:hover {
-  background-color: #f5f5f5;
-  border-color: #ccc;
+  transition: all 0.2s;
+  
+  &:hover {
+    background-color: #45a049;
+  }
+  
+  &.disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    
+    &:hover {
+      background-color: #ccc;
+    }
+  }
 }
 
 .entry-group-option.unavailable {
   background-color: #f5f5f5;
   border-color: #ccc;
   opacity: 0.6;
-}
-
-.entry-group-option.unavailable:hover {
-  background-color: #f5f5f5;
-  border-color: #ccc;
+  
+  &:hover {
+    background-color: #f5f5f5;
+    border-color: #ccc;
+  }
 }
 
 .condition-info {
@@ -326,59 +304,57 @@
   background-color: #fff3cd;
   border: 1px solid #ffeaa7;
   border-radius: 4px;
-}
-
+  
   .condition-text {
     margin: 0;
     font-size: 12px;
     color: #856404;
     font-style: italic;
   }
+}
 
-  // Upgrade profiles styling
-  .upgrade-profiles {
-    margin-top: 8px;
-  }
+// Profile and rule items
+.upgrade-profiles, .upgrade-rules, .option-profiles, .option-rules, 
+.selected-upgrade-profiles, .selected-upgrade-rules {
+  margin-top: 8px;
+}
 
-  .upgrade-profile {
-    background-color: #f0f8ff;
-    border: 1px solid #e3f2fd;
-    border-radius: 4px;
-    padding: 6px;
-    margin-bottom: 6px;
-  }
+.upgrade-profile, .upgrade-rule, .option-profile, .option-rule,
+.selected-upgrade-profile, .selected-upgrade-rule {
+  padding: 6px;
+  margin-bottom: 6px;
+  border-radius: 4px;
+  font-size: 11px;
+}
 
-  .upgrade-profile strong {
+.upgrade-profile, .selected-upgrade-profile {
+  background-color: #f0f8ff;
+  border: 1px solid #e3f2fd;
+  
+  strong {
     color: #1565c0;
     font-size: 12px;
     display: block;
     margin-bottom: 2px;
   }
+}
 
-  .upgrade-characteristic {
-    margin-left: 12px;
-    color: #666;
-    font-size: 11px;
-  }
-
-  // Entry group option profiles styling
-.option-profiles {
-  margin-top: 8px;
+.upgrade-characteristic, .selected-upgrade-characteristic {
+  margin-left: 12px;
+  color: #666;
+  font-size: 11px;
 }
 
 .option-profile {
   background-color: #faf5ff;
   border: 1px solid #e1bee7;
-  border-radius: 4px;
-  padding: 6px;
-  margin-bottom: 6px;
-}
-
-.option-profile strong {
-  color: #6a1b9a;
-  font-size: 12px;
-  display: block;
-  margin-bottom: 2px;
+  
+  strong {
+    color: #6a1b9a;
+    font-size: 12px;
+    display: block;
+    margin-bottom: 2px;
+  }
 }
 
 .option-characteristic {
@@ -387,163 +363,62 @@
   font-size: 11px;
 }
 
-// Upgrade rules styling
-.upgrade-rules {
-  margin-top: 8px;
-}
-
-.upgrade-rule {
+.upgrade-rule, .selected-upgrade-rule {
   background-color: #fff8e1;
   border: 1px solid #ffd54f;
-  border-radius: 4px;
-  padding: 6px;
-  margin-bottom: 6px;
-}
-
-.upgrade-rule strong {
-  color: #f57c00;
-  font-size: 12px;
-  display: block;
-  margin-bottom: 2px;
-}
-
-.upgrade-rule p {
-  margin: 0;
-  color: #666;
-  font-size: 11px;
-  font-style: italic;
-}
-
-// Entry group option rules styling
-.option-rules {
-  margin-top: 8px;
+  
+  strong {
+    color: #f57c00;
+    font-size: 12px;
+    display: block;
+    margin-bottom: 2px;
+  }
+  
+  p {
+    margin: 0;
+    color: #666;
+    font-size: 11px;
+    font-style: italic;
+  }
 }
 
 .option-rule {
   background-color: #fce4ec;
   border: 1px solid #f48fb1;
-  border-radius: 4px;
-  padding: 6px;
-  margin-bottom: 6px;
+  
+  strong {
+    color: #c2185b;
+    font-size: 12px;
+    display: block;
+    margin-bottom: 2px;
+  }
+  
+  p {
+    margin: 0;
+    color: #666;
+    font-size: 11px;
+    font-style: italic;
+  }
 }
 
-.option-rule strong {
-  color: #c2185b;
-  font-size: 12px;
-  display: block;
-  margin-bottom: 2px;
-}
-
-.option-rule p {
-  margin: 0;
-  color: #666;
-  font-size: 11px;
-  font-style: italic;
-}
-
-// Selected upgrade profiles styling
-.selected-upgrade-profiles {
-  margin-top: 8px;
-}
-
-.selected-upgrade-profile {
-  background-color: #e8f5e8;
-  border: 1px solid #c8e6c9;
-  border-radius: 4px;
-  padding: 6px;
-  margin-bottom: 6px;
-}
-
-.selected-upgrade-profile strong {
-  color: #2e7d32;
-  font-size: 12px;
-  display: block;
-  margin-bottom: 2px;
-}
-
-.selected-upgrade-characteristic {
-  margin-left: 12px;
-  color: #666;
-  font-size: 11px;
-}
-
-// Selected upgrade rules styling
-.selected-upgrade-rules {
-  margin-top: 8px;
-}
-
-.selected-upgrade-rule {
-  background-color: #fff3e0;
-  border: 1px solid #ffcc02;
-  border-radius: 4px;
-  padding: 6px;
-  margin-bottom: 6px;
-}
-
-.selected-upgrade-rule strong {
-  color: #e65100;
-  font-size: 12px;
-  display: block;
-  margin-bottom: 2px;
-}
-
-.selected-upgrade-rule p {
-  margin: 0;
-  color: #666;
-  font-size: 11px;
-  font-style: italic;
-}
-
-.selected-upgrades {
-  margin-top: 16px;
-}
-
-.selected-upgrades h5 {
-  color: #2196f3;
-  font-weight: bold;
-}
-
-.selected-upgrades-header {
-  cursor: pointer;
-  user-select: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-}
-
-.selected-upgrades-header:hover {
-  color: #1976d2;
-}
-
-.selected-upgrades-content {
-  margin-top: 8px;
-}
-
+// Selected upgrades
 .selected-upgrade {
   background-color: #e3f2fd;
   border-left: 3px solid #2196f3;
-  padding: 12px;
-  margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.selected-upgrade .upgrade-info strong {
-  color: #1565c0;
-  font-size: 14px;
-  display: block;
-  margin-bottom: 4px;
-}
-
-.selected-upgrade .upgrade-points {
-  font-size: 12px;
-  color: #666;
-  background-color: #bbdefb;
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-left: 8px;
+  
+  .upgrade-info strong {
+    color: #1565c0;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 4px;
+  }
+  
+  .upgrade-points {
+    background-color: #bbdefb;
+  }
 }
 
 .remove-upgrade-btn {
@@ -555,63 +430,37 @@
   cursor: pointer;
   font-size: 11px;
   font-weight: bold;
+  transition: all 0.2s;
+  
+  &:hover {
+    background-color: #d32f2f;
+  }
 }
 
-.remove-upgrade-btn:hover {
-  background-color: #d32f2f;
-}
-
-.entry-groups {
-  margin-top: 16px;
-}
-
-.entry-groups h5 {
-  color: #9c27b0;
-  font-weight: bold;
-}
-
-.entry-groups-header {
-  cursor: pointer;
-  user-select: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-}
-
-.entry-groups-header:hover {
-  color: #7b1fa2;
-}
-
-.entry-groups-content {
-  margin-top: 8px;
-}
-
+// Entry groups
 .entry-group {
   background-color: #f3e5f5;
   border-left: 3px solid #9c27b0;
-  padding: 12px;
-  margin-bottom: 10px;
 }
 
 .entry-group-info {
   margin-bottom: 8px;
-}
-
-.entry-group-info strong {
-  color: #6a1b9a;
-  font-size: 14px;
-  display: block;
-  margin-bottom: 4px;
+  
+  strong {
+    color: #6a1b9a;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 4px;
+  }
 }
 
 .entry-group-count {
-  font-size: 12px;
+  font-size: 11px;
   color: #666;
   background-color: #e1bee7;
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-left: 8px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 6px;
 }
 
 .entry-group-hierarchy {
@@ -631,13 +480,13 @@
   margin-bottom: 8px;
   padding-bottom: 4px;
   border-bottom: 1px solid #e1bee7;
-}
-
-.section-header strong {
-  color: #6a1b9a;
-  font-size: 13px;
-  display: block;
-  margin-bottom: 2px;
+  
+  strong {
+    color: #6a1b9a;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+  }
 }
 
 .section-count {
@@ -690,25 +539,25 @@
   cursor: pointer;
   font-size: 11px;
   font-weight: bold;
+  transition: all 0.2s;
+  
+  &:hover {
+    background-color: #7b1fa2;
+  }
+  
+  &.disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    
+    &:hover {
+      background-color: #ccc;
+    }
+  }
 }
 
-.add-option-btn:hover {
-  background-color: #7b1fa2;
-}
-
-.add-option-btn.disabled {
-  background-color: #ccc;
-  color: #666;
-  cursor: not-allowed;
-}
-
-.add-option-btn.disabled:hover {
-  background-color: #ccc;
-}
-
-// Print styles for model component
+// Print styles
 @media print {
-  // Hide interactive elements
   .quantity-controls button,
   .remove-model-btn,
   .add-upgrade-btn,
@@ -717,43 +566,35 @@
     display: none !important;
   }
   
-  // Show quantity as text instead of controls
   .quantity-controls {
     display: flex !important;
     align-items: center !important;
     gap: 8px !important;
+    
+    &::before {
+      content: "Quantity: " !important;
+      font-weight: bold !important;
+    }
+    
+    &::after {
+      content: attr(data-quantity) !important;
+    }
   }
   
-  .quantity-controls::before {
-    content: "Quantity: " !important;
-    font-weight: bold !important;
-  }
-  
-  .quantity-controls::after {
-    content: attr(data-quantity) !important;
-  }
-  
-  // Hide available upgrades and entry groups sections completely
   .upgrades,
   .entry-groups {
     display: none !important;
   }
   
-  // Ensure selected upgrades section is expanded for print
-  .selected-upgrades {
-    display: block !important;
-  }
-  
+  .selected-upgrades,
   .selected-upgrades-content {
     display: block !important;
   }
   
-  // Remove collapsible functionality for print
   .selected-upgrades-header {
     cursor: default !important;
   }
   
-  // Ensure good contrast
   .model-card {
     background: white !important;
     color: black !important;
@@ -761,7 +602,6 @@
     box-shadow: none !important;
   }
   
-  // Make sure selected upgrades are visible
   .selected-upgrade {
     background: white !important;
     color: black !important;

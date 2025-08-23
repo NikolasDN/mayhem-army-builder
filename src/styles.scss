@@ -1,1 +1,106 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Common utility classes */
+.btn {
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+  
+  &.btn-primary {
+    background-color: #1976d2;
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background-color: #1565c0;
+    }
+    
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  }
+  
+  &.btn-success {
+    background-color: #4caf50;
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background-color: #45a049;
+    }
+    
+    &:disabled {
+      background-color: #ccc;
+      color: #666;
+      cursor: not-allowed;
+    }
+  }
+  
+  &.btn-danger {
+    background-color: #f44336;
+    color: white;
+    
+    &:hover {
+      background-color: #d32f2f;
+    }
+  }
+  
+  &.btn-purple {
+    background-color: #9c27b0;
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background-color: #7b1fa2;
+    }
+    
+    &:disabled {
+      background-color: #ccc;
+      color: #666;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.section-header {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.section-content {
+  margin-top: 8px;
+}
+
+.item-card {
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.points-badge {
+  font-size: 11px;
+  color: #666;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 6px;
+}
+
+/* Common color variables */
+:root {
+  --primary: #1976d2;
+  --primary-dark: #1565c0;
+  --success: #4caf50;
+  --success-dark: #45a049;
+  --warning: #ff9800;
+  --warning-dark: #f57c00;
+  --danger: #f44336;
+  --danger-dark: #d32f2f;
+  --info: #2196f3;
+  --purple: #9c27b0;
+  --purple-dark: #7b1fa2;
+}
