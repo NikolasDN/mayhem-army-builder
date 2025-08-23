@@ -32,7 +32,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: dist-files
-        path: dist/mayhem
+        path: dist/mayhem/browser
 
   deploy:
     needs: build
@@ -51,10 +51,10 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: dist-files
-        path: dist/mayhem
+        path: dist/mayhem/browser
         
     - name: List files in dist
-      run: ls -la dist/mayhem
+      run: ls -la dist/mayhem/browser
       
     - name: Check repository status
       run: |
@@ -68,7 +68,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist/mayhem
+        publish_dir: ./dist/mayhem/browser
         force_orphan: true
         enable_jekyll: false
         user_name: 'github-actions[bot]'
