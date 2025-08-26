@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" data-beasties-container>
+<head>
+  <meta charset="utf-8">
+  <title>Mayhem</title>
+  <script>
+    // Auto-detect environment and set base href
+    (function() {
+      var base = document.createElement('base');
+      var hostname = window.location.hostname;
+      
+      if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        // Local development
+        base.href = '/';
+      } else if (hostname.includes('github.io')) {
+        // GitHub Pages
+        base.href = '/mayhem-army-builder/';
+      } else {
+        // Fallback to relative path
+        base.href = './';
+      }
+      
+      document.head.appendChild(base);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script type="text/javascript">
+    // Single Page Apps for GitHub Pages
+    // MIT License
+    // https://github.com/rafgraph/spa-github-pages
+    // This script checks to see if a redirect is present in the query string,
+    // converts it back into the correct url and adds it to the
+    // browser's history using window.history.replaceState(...),
+    // which won't cause the browser to attempt to load the new url.
+    // When the single page app is loaded further down in this file,
+    // the correct url will be waiting in the browser's history for
+    // the single page app to route accordingly.
+    (function(l) {
+      if (l.search[1] === '/' ) {
+        var decoded = l.search.slice(1).split('&').map(function(s) { 
+          return s.replace(/~and~/g, '&')
+        }).join('?');
+        window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+        );
+      }
+    }(window.location))
+  </script>
+<style>html,body{margin:0;padding:0;min-height:100vh;background-image:url("./media/background.png");background-size:cover;background-position:center;background-repeat:no-repeat;background-attachment:fixed;font-family:Arial,sans-serif}body{background-color:transparent}app-root{display:block;min-height:100vh}*{font-family:Arial,sans-serif}:root{--primary:#1976d2;--primary-dark:#1565c0;--success:#4caf50;--success-dark:#45a049;--warning:#ff9800;--warning-dark:#f57c00;--danger:#f44336;--danger-dark:#d32f2f;--info:#2196f3;--purple:#9c27b0;--purple-dark:#7b1fa2;--dark-panel-bg:rgba(64, 64, 64, .5);--dark-panel-border:rgba(128, 128, 128, .3);--dark-panel-text:#ffffff;--dark-panel-text-secondary:#f0f0f0}</style><link rel="stylesheet" href="styles.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles.css"></noscript></head>
+<body>
+  <app-root></app-root>
+<script src="polyfills.js" type="module"></script><script src="main.js" type="module"></script></body>
+</html>

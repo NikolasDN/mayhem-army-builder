@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<dataIndex battleScribeVersion="1.14b" name="mayhembattlechest" xmlns="http://www.battlescribe.net/schema/dataIndexSchema">
+  <repositoryUrls/>
+  <dataIndexEntries>
+    <dataIndexEntry filePath="MayhemBattleChest.gst" dataType="gamesystem" dataId="42e200ee-e8b8-79c0-5ec7-8a80130a215e" dataName="Mayhem Battle Chest" dataBattleScribeVersion="1.14b" dataRevision="4"/>
+    <dataIndexEntry filePath="MayhemBattleChest.cat" dataType="catalogue" dataId="942f791b-9e0f-4154-21d3-0cf25fc79ae4" dataName="Mayhem - Battle Chest" dataBattleScribeVersion="1.14b" dataRevision="1"/>
+  </dataIndexEntries>
+</dataIndex>
